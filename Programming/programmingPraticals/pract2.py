@@ -10,7 +10,7 @@ def circumferenceOfCircle():
 
 def areaOfCircle():
     radius = float(input("Enter radius: "))
-    print(f"The are of the circle is {math.pi*(radius**2):.2f}")
+    print(f"The area of the circle is {math.pi*(radius**2):.2f}")
 
 def costOfPizza():
     diameter = float(input("Enter diameter: "))
