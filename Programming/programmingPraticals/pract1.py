@@ -17,7 +17,7 @@ def tenHellos():
 def railFareIncrease():
     print("The current price for a ticket from Southampton to Portsmouth is £16.50")
     price = 16.50
-    for i in range(11):
+    for _ in range(11):
         price = price * 1.02
     print(f"The price in 11 months is £{price:.2f}")
 
@@ -29,10 +29,8 @@ def countTo():
 def countFromTo():
     startCount = int(input("Enter number to start from: "))
     endCount = int(input("Enter number to count to: "))
-    x = startCount
     for i in range(startCount, endCount+1):
-        print(x, end=' ')
-        x+=1
+        print(i, end=' ')
 
 def changeCounter():
     onePence = int(input("Enter amount of 1p's: "))
@@ -49,7 +47,7 @@ def weightsTable():
 def futureRailFare():
     fare = float(input("Enter inital rail fare price: "))
     months = int(input("Enter number of months: "))
-    for i in range(months):
+    for _ in range(months):
         fare = fare * 1.02
     print(f"The cost of this ticket will be £{fare:.2f}")
 
