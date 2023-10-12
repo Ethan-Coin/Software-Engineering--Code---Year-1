@@ -1,5 +1,5 @@
 from graphics import *
-from math import *
+import math 
 
 def drawStickFigure():
     win = GraphWin("Stick figure")
