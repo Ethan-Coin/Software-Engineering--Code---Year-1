@@ -4,13 +4,15 @@ class Participant:
         self.points = 0
         self.choice = ""
     def choose(self):
-        self.choice = input("{name}, select rock, paper or scissor: ".format(name= self.name))
+        self.choice = input("{name}, select rock, paper, scissor, lizard or spock: ".format(name= self.name))
         print("{name} selects {choice}".format(name=self.name, choice = self.choice))
     def toNumericalChoice(self):
         switcher = {
             "rock": 0,
             "paper": 1,
-            "scissor": 2
+            "scissor": 2,
+            "lizard": 3,
+            "spock": 4
         }
         return switcher[self.choice]
     def incrementPoint(self):
@@ -19,9 +21,11 @@ class Participant:
 class GameRound:
     def __init__(self, p1, p2):
         self.rules = [
-            [0, -1, 1],
-            [1, 0, -1],
-            [-1, 1, 0]
+            [0, -1, 1, 1, -1],
+            [1, 0, -1, -1, 1],
+            [-1, 1, 0, 1, -1],
+            [-1, 1, -1, 0, 1],
+            [1, -1, 1, -1, 0]
         ]
 
         p1.choose()
