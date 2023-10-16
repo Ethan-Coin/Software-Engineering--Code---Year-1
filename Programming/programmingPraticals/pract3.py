@@ -134,3 +134,5 @@ def fiveClickStickFigure():
     rightLeg.draw(win)
     
     quit(win)
+
+fiveClickStickFigure()
