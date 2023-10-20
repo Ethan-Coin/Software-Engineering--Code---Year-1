@@ -1,4 +1,5 @@
 import math
+
 def speedCalculator():
     distanceTravelled= int(input("Enter distance travelled in km: "))
     duration = int(input("Enter duration of journey: "))

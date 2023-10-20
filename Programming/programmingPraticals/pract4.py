@@ -1,4 +1,6 @@
 from graphics import *
+import os
+
 def personalGreeting():
     userName=input("Enter your name: ")
     print(f"Hello {userName}, nice to see you!")
@@ -76,8 +78,73 @@ def nameToNumber():
 
 def fileInCaps():
     filename=input("Enter file name: ")+".txt"
-    file = open("quotation.txt", "r")
-    for line in file():
-        print(line).upper()
+    file = open(filename, "r")
+    content = file.read()
+    print(content.upper())
 
-fileInCaps()
+def totalSpending():
+    file = open("spending.txt", "r")
+    sum=0
+    for line in file:
+        sum+=float(line)
+    print(f"The total spent this week was £{sum}")
+
+def rainfallChart():
+    file = open("rainfall.txt", "r")
+    for line in file:
+        words=[]
+        words= line.split(" ")
+        numberOfAsterisks = int(words[1])
+        print(words[0], "*" * numberOfAsterisks)
+
+def graphicalRainfallChart():
+    file = open("rainfall.txt", "r")
+    win = GraphWin("Rainfall Chart", 500, 500)
+    win.setCoords(0,0,1,1)
+    y=0.9
+    for line in file:
+        words=[]
+        words= line.split(" ")
+        numberOfAsterisks = int(words[1])
+        place = Text(Point(0.1,y),words[0])
+        place.setSize(12)
+        place.draw(win)
+        x=0.22
+        for _ in range(numberOfAsterisks):
+            rectangle=Rectangle(Point(x,y+0.01),Point(x+0.01,y-0.01))
+            rectangle.setFill("blue")
+            rectangle.draw(win)
+            x+=0.015
+        y-=0.1
+    win.getMouse()
+    win.close()
+
+def rainfallInInches():
+    file = open("rainfall.txt", "r")
+    for line in file:
+        words=[]
+        words= line.split(" ")
+        rainfallMM = int(words[-1])
+        rainfallInches = rainfallMM / 25.4
+        print(f"{words[0]} {rainfallInches:.2f}")
+
+def wc():
+    filename = input("Enter the file name: ")+".txt"
+    file = open(filename, "r")
+    chars=0
+    words=0
+    lines=0
+    for line in file:
+        line = line.replace("\n","")
+        for _ in line:
+            chars+=1
+        wordList=[]
+        wordList=line.split(" ")
+        if wordList[-1] == "":
+            wordList.remove("")
+        words+=len(wordList)
+        print(wordList)
+        lines+=1
+    print(f"Characters = {chars} Words = {words} Lines = {lines}")
+
+
