@@ -1,5 +1,4 @@
 from graphics import *
-import os
 
 def personalGreeting():
     userName=input("Enter your name: ")
