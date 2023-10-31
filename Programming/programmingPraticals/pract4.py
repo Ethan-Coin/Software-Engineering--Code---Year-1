@@ -145,5 +145,3 @@ def wc():
         print(wordList)
         lines+=1
     print(f"Characters = {chars} Words = {words} Lines = {lines}")
-
-
