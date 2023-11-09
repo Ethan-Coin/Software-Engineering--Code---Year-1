@@ -12,7 +12,7 @@ def formalName():
 def kilo2Ounces():
     kilos=float(input("Enter amount of kilos to convert to ounces: "))
     ounces= kilos*35.274
-    print(f"{kilos} kilos is equal to {ounces} ounces")
+    print(f"{kilos:.2f} kilos is equal to {ounces:.2f} ounces")
 
 def generateEmail():
     firstName=input("Enter first name: ").lower()
@@ -21,19 +21,9 @@ def generateEmail():
     print(f"{surname[0:4]}.{firstName[0]}.{year[2:4]}@myport.ac.uk")
 
 def gradeTest():
-    mark=input("Enter mark: ")
-    mark = mark.replace("10","A")
-    mark = mark.replace("9","A")
-    mark = mark.replace("8","A")
-    mark = mark.replace("7","B")
-    mark = mark.replace("6","B")
-    mark = mark.replace("5","C")
-    mark = mark.replace("4","C")
-    mark = mark.replace("3","F")
-    mark = mark.replace("2","F")
-    mark = mark.replace("1","F")
-    mark = mark.replace("0","F")
-    print(mark)
+    mark=int(input("Enter mark: "))
+    gradeList="FFFFCCBBAAA"
+    print(gradeList[mark])
 
 def graphicLetters():
     word=input("Enter a word: ")
@@ -58,7 +48,7 @@ def singASong():
 def exchangeTable():
     print(f"   Euros   |   Pounds")
     for euro in range(0,21):
-        pound = euro * 1.17
+        pound = euro / 1.17
         print(f"{euro:>10.2f} | {pound:.2f}")
 
 def makeInitialism():
@@ -134,14 +124,14 @@ def wc():
     words=0
     lines=0
     for line in file:
-        line = line.replace("\n","")
+        line.strip("\n")
         for _ in line:
             chars+=1
         wordList=[]
         wordList=line.split(" ")
-        if wordList[-1] == "":
-            wordList.remove("")
         words+=len(wordList)
         print(wordList)
         lines+=1
     print(f"Characters = {chars} Words = {words} Lines = {lines}")
+
+wc()
