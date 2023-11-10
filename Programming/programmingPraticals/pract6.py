@@ -1,5 +1,6 @@
 from graphics import *
-from pract3 import drawArcheryTarget
+from pract5 import distanceBetweenPoints
+import random
 import math
 
 def greet(name):
@@ -95,10 +96,10 @@ def fastFoodOrderPrice():
 
 #Exercise 2
 def whatToDoToday():
-    temperature=int(input("Enter today's temperature: "))
-    if temperature > 25:
+    temp=int(input("Enter today's temperature: "))
+    if temp > 25:
         print("A swim in the sea")
-    elif temperature > 10 and temperature <= 25:
+    elif temp > 10 and temp <= 25:
         print("Shopping in Gunwharf Quays")
     else:
         print("It’s best to watch a film at home")
@@ -112,25 +113,23 @@ def displaySquareRoot(start,end):
 
 #Exercise 4
 def calculateGrade(mark):
-    grade=""
     if mark >= 16 and mark <=20:
-        grade="A"
+        return "A"
     elif mark >= 12 and mark <=15:
-        grade = "B"
+        return "B"
     elif mark >=8 and mark <=11:
-        grade = "C"
+        return "C"
     elif mark >=0 and mark <= 7:
-        grade = "F"
+        return "F"
     else:
-        grade = "X"
-    return grade
-
+        return "X"
+    
 #Exercise 5
 def peasInAPod():
-    numberOfPeas=int(input("Enter the number of peas: "))
-    screenX=100*numberOfPeas
+    numOfPeas=int(input("Enter the number of peas: "))
+    screenX=100*numOfPeas
     window=GraphWin("Peas",screenX,100)
-    for i in range(numberOfPeas):
+    for i in range(numOfPeas):
         pea=Circle(Point(50+i*100,50),50)
         pea.setFill("#66ff66")
         pea.setOutline("#66ff66")
@@ -138,8 +137,8 @@ def peasInAPod():
     window.getMouse()
 
 #Exercise 6
-def ticketPrice(jDistance,pAge):
-    ticketCost=10+0.15*jDistance
+def ticketPrice(jDist,pAge):
+    ticketCost=10+0.15*jDist
     if pAge >= 60 or pAge <= 15:
         ticketCost=ticketCost*0.6
     return ticketCost
@@ -196,6 +195,8 @@ def drawPatchWindow():
         else:
             colour = "red"
     win.getMouse()
+    win.close()
+#drawPatchWindow()
 
 #Exercise 10
 def drawPatch(win,x,y,col):
@@ -217,9 +218,10 @@ def drawPatchwork():
     winH=win.getHeight()
     for x in range(0,winW,100):
         for y in range(0,winH,100):
-            print(x,y)
             drawPatch(win,x,y,"blue")
     win.getMouse()
+    win.close()
+#drawPatchwork()
 
 #Exercise 11
 def eyesAllAround():
@@ -231,3 +233,39 @@ def eyesAllAround():
     win.getMouse()
 
 #Exercise 12
+def archeryGame():
+    win=GraphWin()
+    win.setBackground("#57200f")
+    win.setCoords(0,0,100,100)
+    drawCircle(win,Point(50,50),50,"blue")
+    drawCircle(win,Point(50,50),30,"red")
+    drawCircle(win,Point(50,50),10,"yellow")
+    score=0
+    windMessage=Text(Point(70,95),"")
+    windMessage.setFill("white")
+    windMessage.setSize(15)
+    windMessage.draw(win)
+    for _ in range(5):
+        windX=random.randint(-25,25)
+        windY=random.randint(-25,25)
+        windMessage.setText(f"x:{windX} y:{windY}")
+        p1=win.getMouse()
+        p1=Point(p1.getX()+windX,p1.getY()+windY)
+        arrow=Circle(p1,2)
+        arrow.setFill("black")
+        arrow.draw(win)
+        distance=distanceBetweenPoints(p1,Point(50,50))
+        if distance <= 10:
+            score+=10
+        elif distance <= 30:
+            score+=5
+        elif distance <= 50:
+            score+=2
+    scoreMessage=Text(Point(50,20),f"Your final score is {score}")
+    scoreMessage.setFill("white")
+    scoreMessage.setSize(14)
+    scoreMessage.draw(win)
+    win.getMouse()
+    win.close()
+
+archeryGame()

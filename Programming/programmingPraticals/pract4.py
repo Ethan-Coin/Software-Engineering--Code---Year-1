@@ -124,7 +124,7 @@ def wc():
     words=0
     lines=0
     for line in file:
-        line.strip("\n")
+        line = line.strip(" \n")
         for _ in line:
             chars+=1
         wordList=[]
@@ -133,5 +133,3 @@ def wc():
         print(wordList)
         lines+=1
     print(f"Characters = {chars} Words = {words} Lines = {lines}")
-
-wc()

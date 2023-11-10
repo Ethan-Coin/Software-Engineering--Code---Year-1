@@ -155,4 +155,3 @@ def drawStickFigureFamily():
     drawStickFigure(win,Point(0.9,0.5),1)
     win.getMouse()
 
-drawStickFigureFamily()
