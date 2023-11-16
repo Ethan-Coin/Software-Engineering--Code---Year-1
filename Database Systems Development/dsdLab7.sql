@@ -129,6 +129,7 @@ VALUES  (1, 1, 2, 3.99);
 INSERT INTO tickets (screen_id, movie_id, seat_number, tickect_price)
 VALUES  (1, 1, 1, 5.99);
 
+
 --Question 3
 CREATE TABLE cars (
     car_id SERIAL PRIMARY KEY,

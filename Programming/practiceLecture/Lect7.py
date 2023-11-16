@@ -48,14 +48,16 @@ def drawCircle(win,x,y,size,colour):
 def main():
     width=600
     height=300
-    size=20
+    radius=20
+    diameter=2*radius
     win=GraphWin("",width,height)
-    for rows in range(0,6*size,size):
-        for columns in range(0,10*size,size):
+    for rows in range(radius,3*diameter,diameter):
+        for columns in range(radius,5*diameter,diameter):
             point=win.getMouse()
             x= point.getX()
             y=point.getY()
             colour = colourSelector(x,y,width,height)
-            drawCircle(win,columns,rows,size,colour)
+            drawCircle(win,columns,rows,radius,colour)
             #drawRectangle(win,x,y,size,colour)
+    win.getMouse()
 main()
