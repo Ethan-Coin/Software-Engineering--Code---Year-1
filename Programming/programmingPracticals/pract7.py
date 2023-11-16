@@ -279,13 +279,14 @@ def findTheCircle():
             points-=1
             while points > 0:
                 pLast=pClick
-                pointCircle=Circle(pLast,3)
+                pointCircle=Circle(pLast,2)
                 pointCircle.setFill("black")
                 pointCircle.draw(win)
                 guessText.setText(f"Guess: {11-points}")
                 pClick=win.getMouse()
                 if distanceBetweenPoints(pClick,circle.getCenter()) <= 30*size:
                     pointTotal+=points
+                    pointCircle.undraw()
                     circle.setFill("blue")
                     break
                 elif distanceBetweenPoints(pClick,circle.getCenter()) < distanceBetweenPoints(pLast,circle.getCenter()):
@@ -298,14 +299,12 @@ def findTheCircle():
                     points-=1
         if points == 0:
             message.setText(f"You lose! You scored {pointTotal} points")
-            pointCircle.undraw()
             circle.undraw()
             break
         else:
             round = round + 1
             size-=0.1
             message.setText("click to continue")
-            pointCircle.undraw()
             win.getMouse()
             message.setText(f"round {round}")
             circle.undraw()
