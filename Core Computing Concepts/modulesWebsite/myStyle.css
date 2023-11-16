@@ -1,8 +1,9 @@
 * {
     text-align: justify;
+}
+body {
     background: wheat;
 }
-
 h1 {
     font-family: sans-serif;
     color: crimson;
@@ -11,19 +12,19 @@ h2, h3 {
     font-family: sans-serif;
     color: orchid;
 }
-nav {
-    background:red;
-    padding: 0.1em;
-    margin: 0em auto;
+
+nav ul {
+    background: blue;
+    border-radius: 1rem;
+    padding: 1vmin;
+    text-align: center;
 }
 nav li {
 	margin: 0.2em;
     border-radius: 0.25rem;
-	background: #F0FFF0;
-	color: black;
 	display: inline-block;
 	list-style-type: none;
-  border: solid black thin;
+    border: solid black thin;
 }
 li {
 	margin-top: 0.5em;
@@ -36,15 +37,6 @@ nav li>a {
 	border-radius: 0.25rem;
 	text-decoration: none;
 	display: block;
-}
-
-@media (max-width: 30em) {
-    nav li {
-      margin: 0.25em;
-        padding: 0.25em;
-        color: black;
-        display: block;
-    }
 }
 p {
     font-family: system-ui;
@@ -60,6 +52,17 @@ nav li>a:hover {
 	background: green;
 	color: #000;
 }
-footer {
+:target {
+	background: #009EE23F;
+	border: solid thin;
+    border-radius: 1rem;
+    padding: 1vmin
+}
+:target details[open] {
+    background: #1055723f;
+    padding: 3px;
+    border-radius: 1rem;
+}
+footer{
     text-align: center;
 }

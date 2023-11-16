@@ -135,6 +135,7 @@ def peasInAPod():
         pea.setOutline("#66ff66")
         pea.draw(window)
     window.getMouse()
+    window.close()
 
 #Exercise 6
 def ticketPrice(jDist,pAge):
@@ -179,6 +180,7 @@ def eyePicker():
         colour=input("Enter colour of the eye: ")
     drawColouredEye(win,Point(x,y),radius,colour)
     win.getMouse()
+    win.close()
 
 #Exercise 9
 def drawPatchWindow():
@@ -201,9 +203,8 @@ def drawPatchWindow():
 #Exercise 10
 def drawPatch(win,x,y,col):
     colour = col
-    for i in range(10):
-        multi=5*i
-        rectangle = Rectangle(Point(x+multi,y+multi),Point((x+100)-multi,(y+100)-multi))
+    for i in range(0,50,5):
+        rectangle = Rectangle(Point(x+i,y+i),Point((x+100)-i,(y+100)-i))
         rectangle.setFill(colour)
         rectangle.setOutline(colour)
         rectangle.draw(win)
@@ -221,16 +222,19 @@ def drawPatchwork():
             drawPatch(win,x,y,"blue")
     win.getMouse()
     win.close()
-#drawPatchwork()
 
 #Exercise 11
 def eyesAllAround():
     win=GraphWin("",500,500)
     colours=["blue","grey","green","brown"]
-    for i in range(30):
+    message=Text(Point(250,30),"")
+    message.draw(win)
+    for i in range(1,31):
         centre = win.getMouse()
         drawColouredEye(win,centre,30,colours[i%4])
+        message.setText(f"Eye Count:\n{i}")
     win.getMouse()
+    win.close()
 
 #Exercise 12
 def archeryGame():
@@ -267,5 +271,3 @@ def archeryGame():
     scoreMessage.draw(win)
     win.getMouse()
     win.close()
-
-archeryGame()
