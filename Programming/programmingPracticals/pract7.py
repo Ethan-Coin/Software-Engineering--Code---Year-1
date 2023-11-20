@@ -124,12 +124,18 @@ def orderPrice():
     quantities=[]
     condition="y"
     while condition.capitalize()=="Y":
-        unitPrice=0
-        while unitPrice <= 0:
+        while True:
             unitPrice=float(input("Enter the unit price of the product in pounds: "))
-        quantity=0
-        while quantity < 1:
+            if unitPrice <= 0:
+                print("Please enter a valid unit price")
+            else:
+                break
+        while True:
             quantity = int(input("Enter the quantity of that product: "))
+            if quantity < 1:
+                print("Please enter a valid quantity")
+            else:
+                break
         unitPrices.append(unitPrice)
         quantities.append(quantity)
         condition=input("Do you want to add another product? (Y/N): ")
@@ -218,25 +224,25 @@ def guessTheNumber():
 def clickableBoxOfEyes(rows,columns):
     width=100+100*columns
     height=100+100*rows
+    eyes=[]
     win = GraphWin("Clickable Box of Eyes", width, height)
     tl = Point(50,50)
     br = Point(width-50,height-50)
     rectangle=Rectangle(tl,br)
     rectangle.draw(win)
-    eyes=[]
-    for i in range(rows):
-        for j in range(columns):
-            drawColouredEye(win,Point(100+100*j,100+100*i),50,"blue")
-            circle=Circle(Point(100+100*j,100+100*i),50)
-            eyes.append(circle)
+    for x in range(100,width,100):
+        for y in range(100,height,100):
+            drawColouredEye(win,Point(x,y),50,"blue")
+            eyes.append(Point(x,y))
     message =  Text(Point(width/2, height-25), "")
+    message.setSize(20)
     message.draw(win)
     while True:
         p1 = win.getMouse()
         gap=False
         for i in range(len(eyes)):
-            if distanceBetweenPoints(p1,eyes[i].getCenter()) <= 50:
-                message.setText(f"Eye at row {i//columns+1} column {i%columns+1}")
+            if distanceBetweenPoints(p1,eyes[i]) <= 50:
+                message.setText(f"Eye at row {i%rows+1} column {i//rows+1}")
                 gap=False
                 break
             elif p1.getX()<=50 or p1.getX()>=width-50 or p1.getY()<=50 or p1.getY()>=height-50:
@@ -244,12 +250,11 @@ def clickableBoxOfEyes(rows,columns):
             else:
                 gap=True
         if gap:
-            message.setText("Between eyes")  
-    
+            message.setText("Between eyes")
+
 #Exercise 10
 def findTheCircle():
     win=GraphWin("Find the Circle",400,400)
-    win.setBackground("white")
     win.setCoords(-100,-100,100,100)
     size=1
     round=1
@@ -263,23 +268,23 @@ def findTheCircle():
             message.setText(f"You win! You scored {pointTotal} points")
             circle.undraw()
             break
-        randomX=random.randint(-100,100)
-        randomY=random.randint(-100,100)
-        circle=Circle(Point(randomX,randomY),30*size)
-        circle.setOutline("white")
-        circle.draw(win)
+        circleSize=30*size
+        randomX=random.randint(-100+circleSize,100-circleSize)
+        randomY=random.randint(-100+circleSize,100-circleSize)
+        circle=Circle(Point(randomX,randomY),circleSize)
+        circle.setFill("blue")
+        circle.setOutline("blue")
         points=10
         guessText.setText("Guess: 1")
         pClick=win.getMouse()
         message.setText("")
         if distanceBetweenPoints(pClick,circle.getCenter()) <= 30*size:
             pointTotal+=points
-            circle.setFill("blue")
         else:
             points-=1
             while points > 0:
                 pLast=pClick
-                pointCircle=Circle(pLast,2)
+                pointCircle=Circle(pLast,1)
                 pointCircle.setFill("black")
                 pointCircle.draw(win)
                 guessText.setText(f"Guess: {11-points}")
@@ -287,7 +292,7 @@ def findTheCircle():
                 if distanceBetweenPoints(pClick,circle.getCenter()) <= 30*size:
                     pointTotal+=points
                     pointCircle.undraw()
-                    circle.setFill("blue")
+                    circle.draw(win)
                     break
                 elif distanceBetweenPoints(pClick,circle.getCenter()) < distanceBetweenPoints(pLast,circle.getCenter()):
                     message.setText("getting closer")
@@ -304,8 +309,9 @@ def findTheCircle():
         else:
             round = round + 1
             size-=0.1
-            message.setText("click to continue")
+            message.setText("Found It!\nclick to continue")
             win.getMouse()
             message.setText(f"round {round}")
             circle.undraw()
     win.getMouse()
+    win.close()
