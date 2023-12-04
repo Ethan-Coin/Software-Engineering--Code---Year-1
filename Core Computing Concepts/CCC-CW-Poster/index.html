@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Ethan Schultz">
+    <meta name="date" content="November 2023">        
+    <title>Ethical Self-Driving Car Poster</title>
+    <link rel="stylesheet" href="posterStyle.css"> 
+</head>
+
+<body>
+
+    <main>
+        <article class=unbreaking>
+
+            <section>
+                <h2>Ethical Framework Selection</h2>
+                <p>When designing an algorithm for self-driving cars it is important to consider an ethical framework. Selecting the right ethical framework will provide an optimal route which can guarantee both speed and safety. The ethical framework that I have chosen is the utilitarianism framework.
+                </p>           
+            </section>
+
+            <section>
+                <hr>
+                <h3>Utilitarianism</h3>
+                <p>Is an ethical framework whose fundamental principle is the "greatest happiness principle." This principle states that the right action is the one that maximises utility. Utility is defined as the sum of all the happiness that results from an action, minus the suffering of anyone involved in the action.
+                </p>
+                <p class="gap">The reason that I have chosen this framework is because it is the most logical framework. It is the framework that will result in the most happiness for the most people. By utilising utilitarianism, we can assign a numerical value to each edge in the graph, which will represent the risk involved in taking that traversal. The scale will be from 1 to 5, with 1 being the safest and 5 being the most dangerous. Hence, by performing an algorithm such as Dijkstra's algorithm, we can find the optimal route that will result in the most happiness for the majority.
+                </p>   
+            </section>
+
+            <section>
+                <hr> 
+                <h2>Town One</h2>
+                <img src="Town1FinalWithRoutes.png" alt="Town 1 with weights which combine both the distance and risk.The image also contains 3 routes, fastest, safest and optimal.">
+                <p style="text-align: center; font-size: 0.95vw;">Node 3 is the starting point A and node 30 is the end point B.</p>
+                <nav class="routes">
+                    <ul>
+                        <li><p id="weight"><strong>10</strong></p><p style="display: inline-block;">Weight</p></li>
+                        <li><p id="text">10:1</p><p style="display:inline-block;">Distance:Risk</p></li>
+                        <li><section class="purpleline"></section><p class="routetext">Fastest 19:20</p></li>
+                        <li><section class="cyanline"></section><p class="routetext">Safest 37:10</p></li>
+                        <li><section class="yellowline"></section><p class="routetext">Optimal 21:15</p></li>
+                    </ul>
+                </nav>
+            </section>
+
+        </article>
+
+        <article class=unbreaking>    
+
+            <section>
+                <h2>The Algorithm</h2>
+                <p style="text-align: center;">
+                    The algorithm will describe how to create the graph and add the weights.
+                    As well as how to find the shortest, safest and optimal route in a given town using Dijkstra's shortest path finding algorithm.</p>
+                <ol type="1">
+                    <li>Create the graph</li>
+                    <ol type="a">
+                        <li>At each junction (where the road crosses with another) place a node and assign a number.</li>
+                        <li>Connect each of these nodes with an edge, these should represent the road.</li>
+                        <li>Draw the graph.</li>
+                    </ol>
+                    <li>Create the first weight representing the distance:</li>
+                    <ol type="a">
+                        <li>Assign the value 10 to the longest edge, this will be our reference.</li>
+                        <li>Compare each edge to the reference edge and assign a corresponding weight from the range 1 to 10.</li>
+                        <li>Repeat step b for each edge.</li>
+                    </ol>
+                    <li>Create the second weight representing the risk:</li>
+                    <ol type="a">
+                        <li>Identify the colours surrounding the edge.</li>
+                        <li>If green/green and white assign the weight 1.</li>
+                        <li>If green and blue assign the weight 2.</li>
+                        <li>If blue/blue and white or green and red assign the weight 3.</li>
+                        <li>If blue and red assign the weight 4.</li>
+                        <li>If red/red and white assign the weight 5.</li>
+                        <li>Repeat for each edge.</li>
+                    </ol>
+                    <li>Creating the optimal weights to find the shortest distance it is easier to use one weight than multiple.</li>
+                    <ol type="a">
+                        <li>Combine the distance and risk weights by adding them together.</li>
+                        <li>Repeat for each edge.</li>
+                    </ol>
+                    <li>Use Dijkstra's algorithm to find the shortest path balancing both distance and risk.</li>
+                    <ol type="a">
+                        <li>The algorithm will use the optimal weights to find the shortest path.</li>
+                        <li>Once complete, traverse the graph to the starting point A using the table.</li>
+                        <li>(Optional) Add the distance weight to the total distance weight.</li>
+                        <li>(Optional) Add the risk weight to the total risk weight.</li>
+                    </ol>
+                    <li>The optimal route has now been found.</li>
+                </ol>
+            </section>
+        </article>
+        
+        <article class="unbreaking">
+            <section>
+                <h3>Dijkstra's algorithm</h3>
+                <p style="text-align: center;">The steps of Dijkstra's algorithm as it is being used by the main algorithm.</p>
+                <ol>
+                    <li>Mark all nodes as unvisited.</li>
+                    <li>Assign to all nodes a tentative distance value that will change over time.</li>
+                    <li>For the current node calculate the distance to all unvisited neighbors.</li>
+                    <ol type="a">
+                        <li>Update the shortest distance, if the new distance is shorter than the old distance.</li>
+                    </ol>
+                    <li>Mark the current node as visited</li>
+                    <li>Choose a new current node from unvisited nodes with the smallest distance.</li>
+                    <li>Repeat till all nodes have been visited.</li>
+                </ol>
+            </section>
+
+            <section>
+                <hr>
+                <h2>Town Two</h2>
+                <img src="Town2FinalWithRoutes.png" alt="Town 2 with weights which combine both the distance and risk.The image also contains 3 routes, fastest, safest and optimal.">
+                <p style="text-align: center; font-size: 0.95vw;">Node 1 is the starting point A and node 27 is the end point B.</p>
+                <nav class="routes">
+                    <ul>
+                        <li><p id="weight"><strong>10</strong></p><p style="display: inline-block;">Weight</p></li>
+                        <li><p id="text2">10:1</p><p style="display:inline-block;">Distance:Risk</p></li>
+                        <li><section class="purpleline"></section><p class="routetext">Fastest 24:19</p></li>
+                        <li><section class="cyanline"></section><p class="routetext">Safest 38:11</p></li>
+                        <li><section class="yellowline"></section><p class="routetext">Optimal 32:11</p></li>
+                    </ul>
+                </nav>
+            </section>
+
+            <section>
+                <hr>
+                <h2>Generalisability</h2>
+                <p>As shown by the images, towns one and two both show
+                    their own optimised paths found by the algorithm. This
+                    algorithm can be used in any town as long as it follows
+                    the same rules as the two towns shown. The rules are as
+                    follows: has three different colours (green, blue, and red),
+                    has a starting point and an endpoint, has a path between
+                    each node and has no dead ends. As shown in the example on
+                    The right is a town, which I created to show that the
+                    algorithm can be used in any town.
+                </p>
+            </section>
+        </article>
+        
+        <article class="unbreaking">
+            <section>
+                <h1>Developing a Custom Algorithm for Optimising Routes Based on Ethical Principles for Self-Driving Cars </h1>
+            </section>
+
+            <section>
+                <h2>Town Three</h2>
+                <ul id="town3list">
+                    <li>Map of Town 3<img src="Town3.png" id="town3"></li>
+                    <li>Step 1<img src="Town3WithGraph.png" alt="Town 3 with nodes and edges"></li>
+                    <li>Step 2<img src="Town3Dist.png"></li>
+                    <li>Step 3<img src="Town3Risk.png"></li>
+                    <li>Step 4<img src="Town3Final.png"></li>
+                    <li>Step 5<img src="Town3Optimal.png"></li>
+                </ul>
+                <p style="text-align: center; font-size: 0.95vw;">Node 1 is the starting point A and node 23 is the end point B.</p>
+                <nav class="routes">
+                    <ul>
+                        <li><p id="weight"><strong>10</strong></p><p style="display: inline-block;">Weight</p></li>
+                        <li><p id="text2">10:1</p><p style="display:inline-block;">Distance:Risk</p></li>
+                        <li><section class="yellowline"></section><p class="routetext">Optimal 22:17</p></li>
+                    </ul>
+                </nav>
+            </section>
+
+            <section>
+                <hr>
+                <h2>Conclusion</h2>
+                <p>By using utilitarianism, I have developed an algorithm that will create a graph from a town. Creates the distance weightings and the risk weightings. Then it combines these two weights into another weight. By using Dijkstra's algorithm to find the shortest path with the combined weight. It will output the fastest and safest path for the self-driving car to drive down.</p>
+            </section>
+
+            <section id=aboutme>
+                <p style="margin-top: 1vh;margin-bottom: 2vh;">Created by Ethan Schultz (up2200330)</p>
+                <p style="margin-bottom: 1vh;">Submitted as part of Coursework 1</p>
+            </section>
+        </article>
+    </body>
+</main>

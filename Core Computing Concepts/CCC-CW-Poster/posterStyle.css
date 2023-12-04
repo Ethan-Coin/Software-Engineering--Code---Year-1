@@ -1,0 +1,153 @@
+body {
+    width: 99vw;
+    height: 98vh;
+    overflow: hidden;
+    font-size: 1vw;
+    color: white;
+    background: linear-gradient(25deg, rgb(16, 196, 121) 25%, #082277 55% , rgb(255,0,0));
+}
+
+main {
+    columns: 4;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    margin: 0.1vw;
+    color: white;
+}
+
+h1 {
+    border: solid white thin;
+    border-radius: 1vw;
+    background: linear-gradient(40deg, rgb(138, 138, 138) 40%,rgb(33, 31, 31));
+}
+
+section {
+    padding: 0.25vmin;
+    border-radius: 1vh;
+}
+
+img {
+    width: 100%;
+    box-shadow: 0 0 1vw black;
+    border: solid white black;
+    border-radius: 1vw;
+}
+
+ul {
+    margin: 0;
+}
+
+ol {
+    margin: 0;
+}
+
+ol li {
+    margin: 0.1vw;
+}
+
+.unbreaking {
+    break-inside: avoid;
+}
+
+#town3{
+    width: 90%;
+}
+
+#town3list{
+    columns: 2;
+}
+
+p {
+    text-align: justify;
+    margin: 0.1vw;
+}
+
+hr {
+    margin: 0.1vw;
+}
+
+nav{
+    margin:0;
+}
+
+nav ul {
+    margin: 0;
+    margin-top: 0.5vh;
+    text-align: center;
+}
+
+nav li{
+    display: inline-block;
+    margin-left: 0.1vw;
+    margin-right: 0.1vw;
+    border: 0.1vw solid black;
+    border-radius: 1vw;
+}
+
+#last {
+    background: pink;
+}
+
+#aboutme {
+    background: lightblue;
+    border: solid blue thin;
+    color: blue;
+    font-family: sans-serif;
+}
+
+.gap {
+    margin-top: 1vw;
+}
+
+.routetext{
+    display: inline-block;
+    font-size: 1vw;
+}
+
+#weight {
+    border: solid magenta thin;
+    border-radius: 0.2vw;
+    background: cornflowerblue;
+    color: black;
+    display: inline-block;
+    margin-left: 0.5vw;
+}
+
+#text{
+    display: inline-block;
+    color: rgb(155, 161, 25)
+}
+
+#text2{
+    display: inline-block;
+    color: rgb(246, 255, 0)
+}
+
+.purpleline {
+    width: 1vh;
+    height: 0;
+    background: #59388b;
+    border: 1vh;
+    margin: 0.25vh;
+    display: inline-block;
+}
+
+.yellowline {
+    width: 1vh;
+    height: 0;
+    background: #ede90d;
+    border: 1vh;
+    margin: 0.25vh;
+    display: inline-block;
+}
+
+.cyanline {
+    width: 1vh;
+    height: 0;
+    background: #0de2ed;
+    border: 1vh;
+    margin: 0.25vh;
+    display: inline-block;
+}

@@ -1,0 +1,666 @@
+/*
+ Source Server         : dsd_libdb
+ Source Server Type    : PostgreSQL
+ Source Server Version : 150002 (150002)
+ Source Host           : localhost:5432
+ Source Schema         : public
+ 
+ File Encoding         : 65001
+ Date: 14/07/2023 11:53:31
+ */
+
+-- ----------------------------
+-- Table structure for LANGUAGES
+-- ----------------------------
+CREATE TABLE languages (
+    lang_id SERIAL PRIMARY KEY,
+    lang_name VARCHAR(50) UNIQUE NOT NULL,
+    lang_code CHAR(2) UNIQUE NOT NULL
+);
+-- ----------------------------
+-- Records of LANGUAGES
+-- ----------------------------
+INSERT INTO languages (lang_id, lang_name, lang_code)
+VALUES 
+(1, 'English', 'EN'),
+(2, 'Spanish', 'ES'),
+(3, 'Chinese', 'ZH'),
+(4, 'French', 'FR'),
+(5, 'German', 'DE');
+
+
+
+-- ----------------------------
+-- Table structure for GENRES
+-- ----------------------------
+CREATE TABLE genres (
+    genre_id SERIAL PRIMARY KEY,
+    genre_name VARCHAR(50) UNIQUE NOT NULL
+);
+-- ----------------------------
+-- Records of GENRES
+-- ----------------------------
+INSERT INTO genres (genre_id, genre_name)
+VALUES 
+(1, 'Action'),
+(2, 'Adventure'),
+(3, 'Education'),
+(4, 'Mystery'),
+(5, 'Non-fiction'),
+(6, 'Programming'),
+(7, 'Sci-Fi'),
+(8, 'Science');
+
+
+
+-- ----------------------------
+-- Table structure for PUBLISHERS
+-- ----------------------------
+CREATE TABLE publishers (
+    pub_id SERIAL PRIMARY KEY,
+    pub_name VARCHAR(50) UNIQUE NOT NULL
+);
+-- ----------------------------
+-- Records of PUBLISHERS
+-- ----------------------------
+INSERT INTO publishers (pub_id, pub_name)
+VALUES 
+(1, 'HarperCollins Publishers'),
+(2, 'Penguin Random House'),
+(3, 'Wiley'),
+(4, 'Oxford University Press'),
+(5, 'Cambridge University Press'),
+(6, 'Elsevier'),
+(7, 'Penguin Books'),
+(8, 'Vintage Books');
+
+
+
+-- ----------------------------
+-- Table structure for author
+-- ----------------------------
+CREATE TABLE authors (
+    auth_id SERIAL PRIMARY KEY,
+    auth_name VARCHAR(50) NOT NULL,
+    auth_mid_name VARCHAR(50),
+    auth_last_name VARCHAR(50) NOT NULL,
+    CONSTRAINT unique_author_name UNIQUE (auth_name, auth_mid_name, auth_last_name)
+);
+-- ----------------------------
+-- Records of author
+-- ----------------------------
+INSERT INTO authors (auth_id, auth_name, auth_mid_name, auth_last_name)
+VALUES 
+(1, 'Ayato', NULL, 'Murphy'),
+(2, 'Daichi', NULL, 'Butler'),
+(3, 'Michael', 'Brandon', 'West'),
+(4, 'Momoka', 'Jack', 'Lee'),
+(5, 'Leslie', NULL, 'Kelley');
+
+
+
+-- ----------------------------
+-- Table structure for BOOKS
+-- ----------------------------
+CREATE TABLE books (
+    book_id SERIAL PRIMARY KEY,
+    pub_id INT,
+    genre_id INT,
+    book_isbn VARCHAR(17) UNIQUE,
+    book_title VARCHAR(255) NOT NULL,
+    book_pub_year SMALLINT CHECK (
+        book_pub_year >= 1800
+        AND book_pub_year <= 2100
+    ),
+    book_pages SMALLINT,
+    FOREIGN KEY (pub_id) REFERENCES publishers (pub_id),
+    FOREIGN KEY (genre_id) REFERENCES genres (genre_id)
+);
+-- ----------------------------
+-- Records of BOOKS
+-- ----------------------------
+INSERT INTO books (book_id, pub_id, genre_id, book_isbn, book_title, book_pub_year, book_pages)
+VALUES
+(1, 3, 7, '978-1-86197-876-9', 'The Unseen World', 2015, 332),
+(2, 7, 5, '978-3-86197-876-9', 'Dark Matter Chronicles', 2005, 795),
+(3, 6, 8, '978-4-57029-456-7', 'The Starship Chronicles', 2015, 656),
+(4, 3, 5, '979-2-93211-543-8', 'Mastering SQL', 2021, 255),
+(5, 1, 2, '978-5-59777-765-1', 'The Cipher Chronicles', 2020, 958),
+(6, 3, 2, '979-9-77492-098-3', 'PostgreSQL up and running', 2004, 643),
+(7, 5, 3, '978-6-65233-567-2', 'The Mindful Way', 2003, 569),
+(8, 7, 2, '979-1-48732-654-9', 'The Secrets of the Mind', 2009, 340),
+(9, 7, 3, '978-8-92058-789-4', 'The Lost of Time', 2004, 492),
+(10, 3, 3, '979-3-36674-321-6', 'The Forbidden Empire', 2017, 670),
+(11, 5, 7, '978-2-99876-543-2', 'The Wilderness Survival Guide', 2005, 585),
+(12, 8, 8, '979-6-60908-765-4', 'Return of the Jedi', 2007, 732),
+(13, 6, 6, '978-3-76432-567-8', 'The Rain', 2017, 440),
+(14, 4, 8, '979-8-50231-098-7', 'Secrets of the Cosmos', 2017, 422),
+(15, 2, 8, '978-1-28376-432-1', 'The Quantum Paradox', 2009, 422),
+(16, 5, 1, '979-4-43765-987-4', 'The Forbidden Experiment', 2020, 886),
+(17, 8, 8, '978-5-67439-876-5', 'Adventures in Time', 2012, 683),
+(18, 4, 4, '979-0-80723-210-9', 'Code Breakers', 2005, 288),
+(19, 4, 8, '978-9-99999-999-9', 'The Art of Study', 2003, 414),
+(20, 3, 8, '979-2-51234-567-0', 'The Art of Learning', 2010, 523),
+(21, 4, 3, '978-8-99234-678-2', 'The Mystery of Hollow Hill', 2021, 900),
+(22, 5, 7, '979-5-87654-321-5', 'Code Breaker''s Quest', 2016, 885),
+(23, 3, 3, '978-7-23456-789-3', 'The Lost Expedition', 2000, 668),
+(24, 5, 3, '979-3-99876-543-2', 'The Science of Genetics', 2014, 424),
+(25, 2, 5, '979-1-23436-789-3', 'Database Systems', 2022, 550);
+
+
+-- ----------------------------
+-- Table structure for BOOKS_AUTHORS
+-- ----------------------------
+CREATE TABLE books_authors (
+    book_id INT,
+    auth_id INT,
+    PRIMARY KEY (book_id, auth_id),
+    FOREIGN KEY (book_id) REFERENCES books (book_id),
+    FOREIGN KEY (auth_id) REFERENCES authors (auth_id)
+);
+-- ----------------------------
+-- Records of BOOKS_AUTHORS
+-- ----------------------------
+INSERT INTO books_authors (book_id, auth_id)
+VALUES 
+(15, 4),
+(13, 3),
+(24, 1),
+(18, 2),
+(9, 1),
+(7, 1),
+(10, 5),
+(12, 4),
+(12, 3),
+(19, 2),
+(6, 4),
+(14, 1),
+(23, 1),
+(6, 2),
+(9, 4),
+(23, 3),
+(21, 2),
+(23, 2),
+(22, 1),
+(8, 2),
+(14, 3),
+(5, 2),
+(7, 4),
+(13, 1),
+(3, 4),
+(24, 3),
+(1, 1),
+(14, 2),
+(13, 4),
+(21, 4),
+(16, 2),
+(20, 1),
+(11, 2),
+(9, 2),
+(16, 4),
+(1, 3),
+(20, 2),
+(3, 3),
+(2, 3),
+(24, 2);
+
+
+-- ----------------------------
+-- Table structure for BOOKS_EDITIONS
+-- ----------------------------
+CREATE TABLE books_editions (
+    ed_id SERIAL PRIMARY KEY,
+    book_id INT,
+    ed_no SMALLINT NULL,
+    ed_year SMALLINT CHECK (
+        ed_year >= 1800
+        AND ed_year <= 2100
+    ),
+    FOREIGN KEY (book_id) REFERENCES books (book_id),
+    CONSTRAINT unique_book_edition UNIQUE (book_id, ed_no)
+);
+-- ----------------------------
+-- Records of BOOKS_EDITIONS
+-- ----------------------------
+INSERT INTO books_editions (ed_id, book_id, ed_no, ed_year)
+VALUES 
+    (1, 1, 1, 2014),
+    (2, 1, 2, 2022),
+    (3, 2, 3, 2017),
+    (4, 2, 2, 1950),
+    (5, 2, 1, 2000),
+    (6, 3, 1, 1981),
+    (7, 4, 1, 1998),
+    (8, 5, 2, 1981),
+    (9, 5, 1, 1971),
+    (10, 6, 3, 1963),
+    (11, 7, 2, 1986),
+    (12, 8, 1, 1958),
+    (13, 9, 1, 1995),
+    (14, 9, 2, 2012),
+    (15, 9, 3, 2018),
+    (16, 9, 4, 2023),
+    (17, 10, 2, 2001),
+    (18, 11, 2, 1982),
+    (19, 11, 1, 2001),
+    (20, 12, 1, 2020),
+    (21, 12, 3, 1974),
+    (22, 13, 2, 1982),
+    (23, 14, 2, 1967),
+    (24, 15, 2, 2018),
+    (25, 16, 2, 1968),
+    (26, 17, 1, 1959),
+    (27, 18, 1, 1953),
+    (28, 18, 2, 1991),
+    (29, 18, 3, 2001),
+    (30, 18, 4, 2010),
+    (31, 18, 5, 2020),
+    (32, 19, 1, 1975),
+    (33, 19, 4, 1993),
+    (34, 19, 2, 1978),
+    (35, 19, 3, 1980),
+    (36, 19, 5, 1997),
+    (37, 20, 2, 2004),
+    (38, 20, 1, 2000),
+    (39, 20, 3, 2020),
+    (40, 21, 1, 2012),
+    (41, 21, 2, 2018),
+    (42, 21, 3, 2020),
+    (43, 22, 1, 2003),
+    (44, 22, 2, 2010),
+    (45, 23, 1, 2007),
+    (46, 23, 2, 2008),
+    (47, 23, 3, 2010),
+    (48, 24, 1, 1978),
+    (49, 24, 2, 1987),
+    (50, 24, 3, 2014),
+    (51, 25, 1, 2022),
+    (52, 25, 2, 2023);
+
+
+
+-- ----------------------------
+-- Table structure for BOOKS_LANGUAGES
+-- ----------------------------
+CREATE TABLE books_languages (
+    book_id INT,
+    lang_id INT,
+    PRIMARY KEY (book_id, lang_id),
+    FOREIGN KEY (book_id) REFERENCES books (book_id),
+    FOREIGN KEY (lang_id) REFERENCES languages (lang_id)
+);
+-- ----------------------------
+-- Records of BOOKS_LANGUAGE
+-- ----------------------------
+INSERT INTO books_languages (book_id, lang_id)
+VALUES 
+(1, 1),
+(1, 2),
+(1, 5),
+(2, 1),
+(2, 2),
+(2, 4),
+(2, 5),
+(3, 5),
+(4, 1),
+(4, 2),
+(4, 4),
+(4, 5),
+(5, 2),
+(5, 3),
+(5, 4),
+(5, 5),
+(6, 1),
+(6, 2),
+(6, 4),
+(6, 5),
+(7, 2),
+(7, 3),
+(7, 4),
+(7, 5),
+(8, 1),
+(8, 2),
+(8, 3),
+(8, 4),
+(8, 5),
+(9, 1),
+(9, 4),
+(10, 1),
+(10, 2),
+(10, 4),
+(12, 1),
+(12, 2),
+(12, 3),
+(12, 5),
+(13, 1),
+(13, 2),
+(13, 4),
+(13, 5),
+(14, 1),
+(14, 2),
+(14, 3),
+(14, 4),
+(14, 5),
+(15, 1),
+(15, 4),
+(15, 5),
+(16, 1),
+(16, 2),
+(16, 3),
+(16, 4),
+(16, 5),
+(17, 1),
+(17, 2),
+(17, 3),
+(17, 4),
+(17, 5),
+(18, 1),
+(18, 2),
+(18, 3),
+(18, 4),
+(18, 5),
+(19, 1),
+(19, 2),
+(19, 4),
+(19, 5),
+(20, 1),
+(20, 2),
+(20, 3),
+(20, 4),
+(20, 5),
+(21, 1),
+(21, 2),
+(21, 3),
+(21, 4),
+(21, 5),
+(22, 1),
+(22, 3),
+(22, 4),
+(22, 5),
+(23, 1),
+(23, 2),
+(23, 3),
+(24, 1),
+(24, 3),
+(24, 4),
+(24, 5),
+(25, 1),
+(25, 2),
+(25, 3),
+(25, 4),
+(25, 5);
+
+
+-- ----------------------------
+-- Table structure for COURSES
+-- ----------------------------
+CREATE TABLE courses (
+    course_id SERIAL PRIMARY KEY,
+    course_name VARCHAR(100) UNIQUE NOT NULL,
+    course_code CHAR(6) UNIQUE NOT NULL
+);
+-- ----------------------------
+-- Records of COURSES
+-- ----------------------------
+INSERT INTO courses (course_id, course_name, course_code)
+VALUES (1, 'Artificial Intelligence', 'C001'),
+    (2, 'Computer Science', 'C002'),
+    (3, 'Data Analytics', 'C003'),
+    (4, 'Information Security', 'C004'),
+    (5, 'Networking', 'C005'),
+    (6, 'Software Engineering', 'C006'),
+    (7, 'Web Development', 'C007');
+
+
+-- ----------------------------
+-- Table structure for STUDENTS
+-- ----------------------------
+CREATE TABLE students (
+    stu_id SERIAL PRIMARY KEY,
+    stu_course INT,
+    stu_name VARCHAR(50) NOT NULL,
+    stu_mid_name VARCHAR(50),
+    stu_last_name VARCHAR(50) NOT NULL,
+    stu_addr1 VARCHAR(50) NOT NULL,
+    stu_addr2 VARCHAR(50),
+    stu_city VARCHAR(60) NOT NULL,
+    stu_postcode CHAR(8) NOT NULL,
+    stu_phone VARCHAR(15) NOT NULL,
+    stu_email VARCHAR(100) UNIQUE NOT NULL,
+    stu_enroll DATE,
+    FOREIGN KEY (stu_course) REFERENCES courses (course_id)
+);
+-- ----------------------------
+-- Records of STUDENTS
+-- ----------------------------
+INSERT INTO students (stu_id, stu_course, stu_name, stu_mid_name, stu_last_name, stu_addr1, stu_addr2, stu_city, stu_postcode, stu_phone, stu_email, stu_enroll)
+VALUES 
+(1, 5, 'Michael', NULL, 'Baker', '396 39 William IV St, Charing Cross', NULL, 'Portsmouth', 'PO16 7GF', '075682 957361', 'wfho7@myport.ac.uk', '2021-09-25'),
+(2, 6, 'Kar Yan', 'Lu', 'Long', '579 39 William IV St, Charing Cross', NULL, 'Liverpool', 'L16 4PB', '071 074 0505', 'huiky1@myport.ac.uk', '2022-08-29'),
+(3, 7, 'Mai', 'Sue', 'Peterson', '594 Lower Temple Street', 'Apt 33', 'Birmingham', 'B17 8QF', '07121 934 5695', 'maiishi@myport.ac.uk', '2023-02-12'),
+(4, 2, 'Wai San', NULL, 'Kong', '50 Stephenson Street', 'Apt 25', 'Birmingham', 'B5 7PA', '027346 955187', 'mok6@myport.ac.uk', '2021-10-31'),
+(5, 4, 'Jessy', NULL, 'Tsang', '932 Papworth Rd, Trumpington', NULL, 'Cambridge', 'CB2 1TN', '071223 86 4725', 'kojima46@myport.ac.uk', '2023-01-01'),
+(6, 4, 'Hana', NULL, 'Cheng', '170 New Wakefield St', 'Block 29', 'Manchester', 'M20 6YR', '01161 341 3870', 'hanaishii@myport.ac.uk', '2022-02-11'),
+(7, 6, 'Philip', NULL, 'Patterson', '971 Portland St', NULL, 'Portsmouth', 'PO7 5JH', '07726 387533', 'phrobe@myport.ac.uk', '2022-04-21'),
+(8, 1, 'Jessica', NULL, 'Look', '513 Regent Street', NULL, 'London', 'E14 7DF', '0751 697409', 'hernandezjessica301@myport.ac.uk', '2022-11-29'),
+(9, 3, 'Ming', 'Maria', 'Gutierrez', '397 39 William IV St, Charing Cross', 'Suite 41', 'Liverpool', 'L13 9AQ', '0151139 7891', 'hsuanmin2@myport.ac.uk', '2023-06-09'),
+(10, 4, 'Kazuma', NULL, 'Turner', '172 Maddox Street', NULL, 'London', 'NW1 5AL', '207242 2136', 'ks909@myport.ac.uk', '2022-11-12');
+
+
+-- ----------------------------
+-- Table structure for LIBRARIANS
+-- ----------------------------
+CREATE TABLE librarians (
+    lib_id SERIAL PRIMARY KEY,
+    lib_name VARCHAR(50) NOT NULL,
+    lib_last_name VARCHAR(50) NOT NULL,
+    lib_email VARCHAR(100) UNIQUE NOT NULL
+);
+-- ----------------------------
+-- Records of LIBRARIANS
+-- ----------------------------
+INSERT INTO librarians (lib_id, lib_name, lib_last_name, lib_email)
+VALUES 
+(1, 'James', 'Scott', 'james.scott@uop.ac.uk'),
+(2, 'Anthony', 'Silva', 'silva.anthony@uop.ac.uk'),
+(3, 'Earl', 'Snyder', 'earl.snyder6@uop.ac.uk');
+
+
+-- ----------------------------
+-- Table structure for BOOKS_INVENTORY
+-- ----------------------------
+CREATE SEQUENCE inv_id_seq;
+CREATE TABLE books_inventory (
+    inv_id VARCHAR(10) DEFAULT (
+        'INV-' || to_char(nextval('inv_id_seq'), 'FM00000')
+    ) PRIMARY KEY,
+    ed_id INT,
+    book_id INT,
+    total_copies INT NOT NULL CHECK (total_copies >= 0),
+    FOREIGN KEY (ed_id) REFERENCES books_editions (ed_id),
+    FOREIGN KEY (book_id) REFERENCES books (book_id)
+);
+-- ----------------------------
+-- Records of BOOKS_INVENTORY
+-- ----------------------------
+INSERT INTO books_inventory (ed_id, book_id, total_copies)
+VALUES 
+(1, 1, 6),
+(2, 1, 2),
+(3, 2, 9),
+(4, 2, 4),
+(5, 2, 7),
+(6, 3, 1),
+(7, 4, 3),
+(8, 5, 2),
+(9, 5, 5),
+(10, 6, 10),
+(11, 7, 1),
+(12, 8, 7),
+(13, 9, 3),
+(14, 9, 8),
+(15, 9, 2),
+(16, 9, 6),
+(17, 10, 9),
+(18, 11, 4),
+(19, 11, 8),
+(20, 12, 3),
+(21, 12, 1),
+(22, 13, 2),
+(23, 14, 3),
+(24, 15, 6),
+(25, 16, 5),
+(26, 17, 7),
+(27, 18, 9),
+(28, 18, 8),
+(29, 18, 6),
+(30, 18, 7),
+(31, 18, 2),
+(32, 19, 3),
+(33, 19, 6),
+(34, 19, 3),
+(35, 19, 4),
+(36, 19, 9),
+(37, 20, 8),
+(38, 20, 7),
+(39, 20, 5),
+(40, 21, 3),
+(41, 21, 1),
+(42, 21, 4),
+(43, 22, 7),
+(44, 22, 8),
+(45, 23, 6),
+(46, 23, 5),
+(47, 23, 3),
+(48, 24, 9),
+(49, 24, 10),
+(50, 24, 4),
+(51, 25, 6),
+(52, 25, 2);
+  
+
+
+-- ----------------------------
+-- Table structure for loan
+-- ----------------------------
+CREATE TYPE loan_status AS ENUM ('Borrowed', 'Returned');
+CREATE TABLE loans (
+    loan_id SERIAL PRIMARY KEY,
+    stu_id INT,
+    lib_id INT,
+    inv_id VARCHAR(9),
+    loan_date DATE NOT NULL,
+    due_date DATE NOT NULL,
+    return_date DATE,
+    status loan_status,
+    CONSTRAINT unique_loan UNIQUE (stu_id, inv_id, loan_date),
+    CONSTRAINT check_loan_dates CHECK (return_date >= loan_date),
+    FOREIGN KEY (stu_id) REFERENCES students (stu_id),
+    FOREIGN KEY (lib_id) REFERENCES librarians (lib_id),
+    FOREIGN KEY (inv_id) REFERENCES books_inventory (inv_id)
+);
+-- ----------------------------
+-- Records of loan
+-- ----------------------------
+INSERT INTO loans (loan_id, stu_id, lib_id, inv_id, loan_date, due_date, return_date, status) 
+VALUES
+(1, 6, 3, 'INV-00016', '2023-05-05', '2023-06-14', '2023-05-11', 'Returned'),
+(2, 8, 3, 'INV-00051', '2022-12-06', '2023-07-06', '2023-05-19', 'Returned'),
+(3, 1, 2, 'INV-00032', '2023-02-08', '2023-03-11', NULL, 'Borrowed'),
+(4, 7, 2, 'INV-00017', '2023-05-08', '2023-07-09', '2023-06-25', 'Returned'),
+(5, 1, 3, 'INV-00028', '2023-03-24', '2023-05-13', NULL, 'Borrowed'),
+(6, 4, 3, 'INV-00009', '2022-12-26', '2023-02-25', NULL, 'Borrowed'),
+(7, 8, 3, 'INV-00015', '2022-06-22', '2022-10-07', '2022-07-11', 'Returned'),
+(8, 2, 3, 'INV-00004', '2022-09-03', '2023-02-06', NULL, 'Borrowed'),
+(9, 9, 3, 'INV-00030', '2023-02-24', '2023-07-08', NULL, 'Borrowed'),
+(10, 6, 3, 'INV-00020', '2023-04-26', '2023-05-02', '2023-05-19', 'Returned'),
+(11, 10, 3, 'INV-00032', '2022-02-04', '2022-10-26', '2022-05-28', 'Returned'),
+(12, 10, 2, 'INV-00044', '2022-01-29', '2022-05-23', '2022-07-25', 'Returned'),
+(13, 1, 3, 'INV-00012', '2023-04-24', '2023-06-01', NULL, 'Borrowed'),
+(14, 2, 3, 'INV-00005', '2022-12-06', '2023-07-10', NULL, 'Borrowed'),
+(15, 5, 3, 'INV-00013', '2022-12-10', '2023-01-01', NULL, 'Borrowed'),
+(16, 7, 3, 'INV-00016', '2022-03-08', '2023-12-15', '2022-07-23', 'Returned'),
+(17, 10, 1, 'INV-00024', '2022-09-16', '2023-01-08', NULL, 'Borrowed'),
+(18, 2, 3, 'INV-00009', '2023-04-30', '2023-06-07', NULL, 'Borrowed'),
+(19, 6, 2, 'INV-00032', '2022-12-22', '2023-06-10', NULL, 'Borrowed'),
+(20, 9, 1, 'INV-00040', '2022-10-11', '2022-11-11', '2022-10-11', 'Returned'),
+(21, 8, 3, 'INV-00034', '2022-09-07', '2023-03-25', '2022-10-27', 'Returned'),
+(22, 6, 3, 'INV-00050', '2023-06-23', '2023-09-10', '2023-07-30', 'Returned'),
+(23, 1, 1, 'INV-00052', '2023-03-13', '2023-12-31', '2023-10-07', 'Returned'),
+(24, 10, 1, 'INV-00005', '2022-10-08', '2023-01-30', NULL, 'Borrowed'),
+(25, 1, 3, 'INV-00045', '2023-03-04', '2023-03-11', NULL, 'Borrowed'),
+(26, 7, 2, 'INV-00027', '2023-03-30', '2023-08-08', '2023-10-06', 'Returned'),
+(27, 4, 1, 'INV-00003', '2023-02-11', '2023-10-27', '2023-03-18', 'Returned'),
+(28, 7, 2, 'INV-00004', '2023-01-20', '2023-03-11', NULL, 'Borrowed'),
+(29, 1, 1, 'INV-00001', '2023-05-31', '2023-06-25', '2023-11-17', 'Returned'),
+(30, 3, 3, 'INV-00014', '2023-05-01', '2023-08-20', '2023-09-06', 'Returned'),
+(31, 1, 1, 'INV-00016', '2022-09-23', '2023-04-18', '2022-12-16', 'Returned'),
+(32, 6, 1, 'INV-00030', '2022-09-30', '2023-03-14', NULL, 'Borrowed'),
+(33, 3, 2, 'INV-00011', '2023-02-16', '2023-05-21', '2023-04-27', 'Returned'),
+(34, 5, 3, 'INV-00041', '2023-06-17', '2023-11-23', '2023-09-15', 'Returned'),
+(35, 8, 3, 'INV-00014', '2023-05-17', '2023-09-05', '2023-06-04', 'Returned'),
+(36, 6, 1, 'INV-00048', '2022-11-13', '2023-04-28', '2022-12-06', 'Returned'),
+(37, 6, 2, 'INV-00020', '2023-01-06', '2023-02-01', '2023-04-17', 'Returned'),
+(38, 2, 3, 'INV-00010', '2022-09-27', '2022-11-29', '2022-10-20', 'Returned'),
+(39, 9, 2, 'INV-00017', '2022-12-26', '2023-03-27', '2023-05-01', 'Returned'),
+(40, 2, 3, 'INV-00024', '2022-09-16', '2023-04-16', NULL, 'Borrowed'),
+(41, 7, 2, 'INV-00008', '2023-06-07', '2023-12-24', '2023-11-23', 'Returned'),
+(42, 9, 1, 'INV-00036', '2022-09-06', '2023-06-08', '2022-11-18', 'Returned'),
+(43, 2, 1, 'INV-00034', '2022-11-20', '2023-01-02', '2023-01-06', 'Returned'),
+(44, 9, 3, 'INV-00038', '2022-11-16', '2023-04-27', NULL, 'Borrowed'),
+(45, 8, 3, 'INV-00035', '2023-03-27', '2022-12-12', NULL, 'Borrowed'),
+(46, 6, 2, 'INV-00011', '2023-01-23', '2023-11-23', '2023-10-29', 'Returned'),
+(47, 4, 2, 'INV-00032', '2023-07-05', '2023-09-13', '2023-08-03', 'Returned'),
+(48, 6, 1, 'INV-00047', '2022-11-10', '2023-03-15', NULL, 'Borrowed'),
+(49, 3, 3, 'INV-00042', '2023-04-06', '2023-06-11', NULL, 'Borrowed'),
+(50, 6, 1, 'INV-00036', '2022-10-13', '2023-01-27', NULL, 'Borrowed'),
+(51, 6, 1, 'INV-00043', '2023-01-16', '2023-01-21', '2023-02-23', 'Returned'),
+(52, 9, 1, 'INV-00042', '2022-11-27', '2023-01-25', NULL, 'Borrowed'),
+(53, 9, 3, 'INV-00016', '2022-09-21', '2022-12-09', NULL, 'Borrowed'),
+(54, 6, 3, 'INV-00045', '2022-12-27', '2023-03-13', '2023-04-22', 'Returned'),
+(55, 8, 1, 'INV-00034', '2023-02-08', '2023-05-14', NULL, 'Borrowed'),
+(56, 5, 3, 'INV-00018', '2023-02-01', '2023-11-23', NULL, 'Borrowed'),
+(57, 5, 3, 'INV-00004', '2022-10-21', '2023-06-30', '2023-12-21', 'Returned'),
+(58, 10, 3, 'INV-00037', '2023-05-16', '2023-08-19', '2023-06-08', 'Returned'),
+(59, 4, 1, 'INV-00046', '2023-06-06', '2023-12-26', '2023-11-20', 'Returned'),
+(60, 10, 1, 'INV-00021', '2023-01-19', '2023-10-12', '2023-05-06', 'Returned'),
+(61, 6, 2, 'INV-00040', '2023-07-11', '2023-11-06', NULL, 'Borrowed'),
+(62, 7, 1, 'INV-00042', '2022-11-23', '2023-06-03', '2023-03-10', 'Returned'),
+(63, 7, 2, 'INV-00038', '2022-11-10', '2023-03-22', '2023-06-13', 'Returned'),
+(64, 8, 1, 'INV-00035', '2023-07-07', '2023-08-02', '2023-08-02', 'Returned'),
+(65, 3, 3, 'INV-00023', '2023-04-22', '2023-05-25', NULL, 'Borrowed'),
+(66, 7, 2, 'INV-00010', '2023-03-29', '2023-10-07', NULL, 'Borrowed'),
+(67, 4, 3, 'INV-00047', '2023-05-09', '2023-07-26', '2023-06-05', 'Returned'),
+(68, 2, 1, 'INV-00052', '2022-10-29', '2022-11-03', NULL, 'Borrowed'),
+(69, 5, 1, 'INV-00001', '2023-03-25', '2023-11-20', '2023-10-30', 'Returned'),
+(70, 10, 2, 'INV-00046', '2023-05-05', '2023-08-31', NULL, 'Borrowed'),
+(71, 2, 2, 'INV-00020', '2023-01-14', '2023-06-15', '2023-04-15', 'Returned'),
+(72, 8, 1, 'INV-00025', '2023-02-13', '2023-06-18', NULL, 'Borrowed'),
+(73, 10, 2, 'INV-00023', '2023-04-19', '2023-10-31', NULL, 'Borrowed'),
+(74, 9, 1, 'INV-00049', '2023-04-06', '2023-11-30', '2023-04-10', 'Returned'),
+(75, 1, 3, 'INV-00035', '2023-02-27', '2023-05-05', NULL, 'Borrowed'),
+(76, 6, 2, 'INV-00044', '2023-06-29', '2023-09-30', '2023-07-04', 'Returned'),
+(77, 5, 1, 'INV-00051', '2023-05-29', '2023-10-15', NULL, 'Borrowed'),
+(78, 4, 3, 'INV-00004', '2023-06-30', '2023-09-15', '2023-10-05', 'Returned'),
+(79, 6, 2, 'INV-00043', '2023-03-11', '2023-11-03', '2023-11-23', 'Returned'),
+(80, 9, 3, 'INV-00017', '2023-05-24', '2023-05-31', NULL, 'Borrowed'),
+(81, 6, 1, 'INV-00045', '2023-03-18', '2023-11-16', '2023-08-27', 'Returned'),
+(82, 4, 2, 'INV-00012', '2022-10-28', '2022-12-02', NULL, 'Borrowed'),
+(83, 6, 1, 'INV-00019', '2023-04-01', '2023-12-06', '2023-07-24', 'Returned'),
+(84, 10, 2, 'INV-00002', '2022-09-16', '2023-01-05', NULL, 'Borrowed'),
+(85, 5, 3, 'INV-00050', '2023-01-12', '2023-04-05', NULL, 'Borrowed'),
+(86, 1, 2, 'INV-00024', '2022-09-18', '2023-03-13', NULL, 'Borrowed'),
+(87, 4, 3, 'INV-00044', '2022-10-27', '2023-05-25', '2022-12-11', 'Returned'),
+(88, 10, 2, 'INV-00033', '2023-04-20', '2023-11-18', NULL, 'Borrowed'),
+(89, 10, 2, 'INV-00042', '2022-12-23', '2023-01-18', '2023-02-07', 'Returned'),
+(90, 4, 3, 'INV-00015', '2023-04-02', '2023-08-25', NULL, 'Borrowed'),
+(91, 8, 2, 'INV-00007', '2023-01-27', '2023-03-02', '2023-04-23', 'Returned'),
+(92, 2, 3, 'INV-00036', '2023-03-03', '2023-06-23', '2023-04-13', 'Returned'),
+(93, 2, 1, 'INV-00049', '2023-06-08', '2023-08-28', '2023-07-19', 'Returned'),
+(94, 3, 3, 'INV-00044', '2023-03-22', '2023-04-18', '2023-03-25', 'Returned'),
+(95, 5, 3, 'INV-00032', '2023-06-06', '2023-08-25', '2023-09-12', 'Returned'),
+(96, 2, 1, 'INV-00033', '2023-02-15', '2023-04-05', '2023-02-24', 'Returned'),
+(97, 7, 2, 'INV-00009', '2022-12-09', '2023-03-02', NULL, 'Borrowed'),
+(98, 7, 3, 'INV-00044', '2022-12-31', '2023-02-20', '2023-02-07', 'Returned'),
+(99, 5, 3, 'INV-00005', '2023-05-06', '2023-10-13', NULL, 'Borrowed'),
+(100, 9, 3, 'INV-00031', '2023-05-11', '2023-06-12', '2023-06-30', 'Returned');
