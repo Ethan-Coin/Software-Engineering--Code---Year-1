@@ -1,25 +1,37 @@
 from graphics import *
 
 #tlx = top left x, tly = top left y, col = colour
-def getInputs():
+def getSize():
     validSizes = [5, 7, 9]
-    validColours = ["red", "green", "blue", "magenta", "orange", "yellow", "cyan"]
-    colours = []
     while True:
-        size = int(input("Enter the size of the patchwork (" + ", ".join(map(str,validSizes[0:-1])) + f" or {str(validSizes[-1])}): "))
+        size = int(input(f"Enter the size of the patchwork ({", ".join(map(str,validSizes[0:-1]))} \
+or {str(validSizes[-1])}): "))
         if size in validSizes:
             break
         else:
-            print("Invalid input. valid inputs are 5, 7 or 9.")
+            print(f"Invalid input. valid inputs are {", ".join(map(str,validSizes[0:-1]))} or \
+{str(validSizes[-1])}\n")
+    return size
+
+def getColours():
+    validColours = ["red", "green", "blue", "magenta", "orange", "yellow", "cyan"]
+    colours = []
     for _ in range(3):
         while True:
-            colour = input("Enter a colour for the patchwork (" + ", ".join(validColours) + "): ").lower()
+            colour = input(f"Enter a colour for the patchwork ({", ".join(validColours)}): ")
+            colour = colour.lower()
             if colour in validColours:
                 colours.append(colour)
                 break
             else:
-                print(f"{colour.capitalize()} is a invalid colour. Valid colours are "+", ".join(validColours[0:-1]) + f"and {validColours[-1]}.\n")
+                print(f"{colour.capitalize()} is a invalid colour. Valid colours are \
+{", ".join(validColours[0:-1])} and {validColours[-1]}.\n")
         print("Colour added successfully\n")
+    return colours
+
+def getInputs():
+    size = getSize()
+    colours = getColours()
     return size * 100, colours
 
 def drawRectangle(win, p1, p2, colour):
@@ -27,7 +39,6 @@ def drawRectangle(win, p1, p2, colour):
     rectangle.setFill(colour)
     rectangle.setOutline(colour)
     rectangle.draw(win)
-    return rectangle
 
 def drawPatchFinal(win, tlx, tly, col):
     colour = col
@@ -104,23 +115,23 @@ def selectTool(win,size):
         else:
             for column in range(0, size, 100):
                 for row in range(0, size, 100):
-                    if point.getX() >= column and point.getX() <= column+100 and point.getY() >= row and point.getY() <= row+100:
+                    if point.getX() >= column and point.getX() <= column+100 and \
+                    point.getY() >= row and point.getY() <= row+100:
                         rectangle=Rectangle(Point(column,row),Point(column+100,row+100))
-                        if rectangle in selected:
-                            print(selected.index(rectangle))
+                        if rectangle == selected:
                             selected.index(rectangle).undraw()
                             selected.remove(rectangle)
                         else:
                             rectangle.draw(win)
                             rectangle.setWidth(2)
                             selected.append(rectangle)
+                        print(selected.index(rectangle))
                         print(selected)
 
-
 def main():
-    # size, colours = getInputs()
-    size = 500
-    colours = ["red", "green", "blue"]
+    size, colours = getInputs()
+    # size = 500
+    # colours = ["red", "green", "blue"]
     win=GraphWin("Patchwork",size,size)
     drawPatchwork(win,size,colours)
     selectTool(win,size)

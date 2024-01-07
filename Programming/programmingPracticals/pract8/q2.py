@@ -42,22 +42,5 @@ def drawRectangle(win, point1, point2, colour):
     rectangle.setFill(colour)
     rectangle.setOutline(colour)
     rectangle.draw(win)
-
-class A:
-    def a(self):
-        return "Function a in class A"
     
-class B:
-    def a(self):
-        return "Function a in class B"
-    
-class C:
-    pass
-
-class D(C,A,B):
-    pass
-
-d=D()
-print(d.a())
-
 #main()
