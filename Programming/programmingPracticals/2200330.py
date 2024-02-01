@@ -6,14 +6,11 @@ from graphics import *
 def get_size():
     """User enters a size for the window"""
     valid_sizes = [5, 7, 9]
-    valid_str_sizes = ["five", "seven", "nine"]
     while True:
         print("Valid sizes of the patchwork (" + ", ".join(map(str,
               valid_sizes[0:-1])), "or", str(valid_sizes[-1]) + ")")
         size = input("Enter Size: ")
         if size in map(str, valid_sizes):
-            break
-        elif size.lower() in valid_str_sizes:
             break
         else:
             print("Invalid input. valid inputs are " + ", ".join(map(str,
@@ -28,7 +25,7 @@ def get_colours():
     colours = []
     for _ in range(3):
         while True:
-            print("Colours for the patchwork (" + ", ".join(valid_colours))
+            print("Colours for the patchwork (" + ", ".join(valid_colours)+")")
             colour = input("Enter Colour: ")
             colour = colour.lower()
             if colour in valid_colours or colour in colours:
