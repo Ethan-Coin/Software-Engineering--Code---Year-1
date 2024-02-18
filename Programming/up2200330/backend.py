@@ -93,7 +93,28 @@ class SmartHome:
         output = "Devices in Smart Home:"
         for device in self.devices:
             if isinstance(device, SmartPlug):
-                output += f"Smart Plug:\n - Switched On: {device.switchedOn}\n - Consumption: {device.consumption}"
+                output += f"\nSmart Plug:\n - Switched On: {device.switchedOn}\n - Consumption: {device.consumption}"
             else:
-                output += f"Smart Light:\n - Switched On: {device.switchedOn}\n - Brightness: {device.brightness}%"
+                output += f"\nSmart Light:\n - Switched On: {device.switchedOn}\n - Brightness: {device.brightness}%"
         return output
+
+
+def testSmartHome():
+    smartHome = SmartHome()
+    smartPlug = SmartPlug(45)
+    smartPlug1 = SmartPlug(45)
+    smartLight = SmartLight()
+    smartPlug.toggleSwitch()
+    smartPlug.setConsumptionRate(150)
+    smartPlug1.setConsumptionRate(25)
+    smartLight.setBrightness(50)
+    smartHome.addDevice(smartPlug)
+    smartHome.addDevice(smartPlug1)
+    smartHome.addDevice(smartLight)
+    smartHome.toggleSwitch(1)
+    print(smartHome)
+    smartHome.turnAllOn()
+    print(smartHome)
+
+
+testSmartHome()
