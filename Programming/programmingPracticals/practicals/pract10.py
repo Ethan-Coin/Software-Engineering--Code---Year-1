@@ -190,9 +190,10 @@ def testSquare():
     print("square's perimeter is", square.getPerimeter())  # 200
     print("square's area is", square.getArea())  # 2500
     print("square center is", square.getCenter())  # MyPoint(135.0, 55.0)
-
+    square = Square(MyPoint(-30, 10), 50)
+    print("\n", square)
     print("Scaling square by a factor of 3")
-    square.scale(3)
+    square.scale(0.5)
     print("square's center is", square.getCenter())
     print("square's p1 is", square.getP1())
     print("square's p2 is", square.getP2())
@@ -356,6 +357,3 @@ def testAeroplane():
 
     airplane.land()
     print(airplane)
-
-
-testAeroplane()

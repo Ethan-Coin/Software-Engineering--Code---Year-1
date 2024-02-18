@@ -2,5 +2,12 @@
     "cSpell.words": [
         "Colour",
         "colours"
-    ]
+    ],
+    "cSpell.ignoreWords": [
+        "padx",
+        "pady",
+        "portishead"
+    ],
+    "cSpell.language": "en-GB",
+    "python.analysis.typeCheckingMode": "basic"
 }

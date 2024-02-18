@@ -61,6 +61,17 @@ class Order:
         if pizzaIndex < len(self.pizzas):
             self.pizzas[pizzaIndex].removeTopping(topping)
 
+    def upgradePizza(self, pizzaIndex, stuffedCrust):
+        if pizzaIndex < len(self.pizzas):
+            if not isinstance(self.pizzas[pizzaIndex], StuffedCrustPizza):
+                toppings = self.pizzas[pizzaIndex].getToppings()
+                size = self.pizzas[pizzaIndex].getSize()
+                self.pizzas.pop(pizzaIndex)
+                pizza = StuffedCrustPizza(size, stuffedCrust)
+                for i in toppings:
+                    pizza.addTopping(i)
+                self.addPizza(pizza)
+
     def __str__(self):
         output = "Your order contains:\n"
         for pizza in self.pizzas:
@@ -113,8 +124,9 @@ def test():
     myOrder.addPizza(pizza1)
     myOrder.addPizza(pizza2)
     myOrder.addTopping(0, "Ham")
-    print(myOrder)
+    # print(myOrder)
     myOrder.removeTopping(1, "Mushrooms")
+    myOrder.upgradePizza(0, "garlic")
 
     print(myOrder)
 
