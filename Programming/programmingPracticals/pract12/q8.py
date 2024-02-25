@@ -6,48 +6,92 @@ class TruthTable:
     def __init__(self):
         self.window = Tk()
         self.window.title("Truth Table")
+        self.window.geometry("400x300")
+        self.window.configure(padx=10, pady=10)
 
-        self.entries = []
-        self.correct_answers = {
-            'AND': [0, 0, 0, 1],
-            'OR': [0, 1, 1, 1],
-            'XOR': [0, 1, 1, 0],
-            'NOT': [1, 0]
-        }
+        self.answers = [BooleanVar(), BooleanVar(), BooleanVar(), BooleanVar()]
+        self.finalResult = StringVar()
 
-        row = 0
-        for gate, answers in self.correct_answers.items():
-            Label(self.window, text=gate).grid(row=row, column=0, columnspan=2)
-            row += 1
-            for i in range(len(answers)):
-                if gate == 'NOT':
-                    Label(self.window, text=f"NOT {'True' if i else 'False'}").grid(
-                        row=row, column=0)
-                else:
-                    Label(
-                        self.window, text=f"{'True' if i//2 else 'False'} {gate} {'True' if i%2 else 'False'}").grid(row=row, column=0)
-                entry = Entry(self.window)
-                entry.grid(row=row, column=1)
-                self.entries.append(entry)
-                row += 1
-
-        Button(self.window, text="Submit", command=self.calculate_score).grid(
-            row=row, column=0, columnspan=2)
-
-    def calculate_score(self):
-        score = 0
-        for entry, correct_answer in zip(self.entries, [answer for answers in self.correct_answers.values() for answer in answers]):
-            try:
-                if int(entry.get()) == correct_answer:
-                    score += 1
-            except ValueError:
-                pass
-        Label(self.window, text=f"Score: {score / len(self.entries) * 100}%").grid(
-            row=len(self.entries) + len(self.correct_answers) + 1, column=0, columnspan=2)
+        self.window.columnconfigure((0, 1, 2), weight=1)
+        self.window.rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
 
     def run(self):
+        self.createWidgets()
         self.window.mainloop()
 
+    def createWidgets(self):
+        Label(self.window, text="XOR Gate").grid(
+            column=0, columnspan=3, row=0, sticky="nwse")
 
-truthTable = TruthTable()
-truthTable.run()
+        lblA = Label(
+            self.window,
+            text="A"
+        )
+        lblA.grid(column=0, row=1, sticky="nwse")
+
+        lblB = Label(
+            self.window,
+            text="B"
+        )
+        lblB.grid(column=1, row=1, sticky="nwse")
+
+        lblResult = Label(
+            self.window,
+            text="Result"
+        )
+        lblResult.grid(column=2, row=1)
+
+        for i in range(2, 6):
+            textVar = StringVar()
+            if i % 2 == 0:
+                textVar.set("True")
+            else:
+                textVar.set("False")
+            Label(
+                self.window,
+                textvariable=textVar
+            ).grid(column=0, row=i, sticky="nwse")
+            if i >= 3:
+                textVar.set("True")
+            else:
+                textVar.set("False")
+            Label(
+                self.window,
+                textvariable=textVar
+            ).grid(column=1, row=i, sticky="nwse")
+            entry = Entry(
+                self.window,
+                textvariable=self.answers[i-2]
+            )
+            entry.grid(column=2, row=i, sticky="nwse")
+
+        btnSubmit = Button(
+            self.window,
+            text="Submit",
+            command=self.submit
+        )
+        btnSubmit.grid(column=1, row=6, sticky="nwse")
+
+        self.lblResult = Label(
+            self.window,
+            textvariable=self.finalResult
+        )
+        self.lblResult.grid(column=2, row=6, sticky="nwse")
+
+    def submit(self):
+        answers = [False, True, True, False]
+        count = 0
+        result = 0
+        for ans in self.answers:
+            if ans.get() == answers[count]:
+                result += 1
+            count += 1
+        self.finalResult.set(f"{round((result/len(answers)))*100}%")
+
+
+def testTruthTable():
+    truthTable = TruthTable()
+    truthTable.run()
+
+
+testTruthTable()

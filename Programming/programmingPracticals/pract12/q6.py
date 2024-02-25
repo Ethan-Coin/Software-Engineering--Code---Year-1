@@ -1,5 +1,6 @@
 # temperature converter
 from tkinter import *
+from tkinter import ttk
 
 
 class TemperatureConverter:
@@ -48,7 +49,7 @@ class TemperatureConverter:
         )
         entryFahrenheit.grid(column=1, row=1, sticky="w")
 
-        btnCel2Farh = Button(
+        btnCel2Farh = ttk.Button(
             self.win,
             text="Convert to Fahrenheit",
             command=self.celsius2Fahrenheit

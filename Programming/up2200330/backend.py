@@ -1,4 +1,5 @@
-class SmartDevice:
+# Classes
+class SmartDevice:  # Base class containing the switchedOn variable for inheritance
     def __init__(self):
         self.switchedOn = False
 
@@ -12,33 +13,25 @@ class SmartDevice:
         return f"Switched On: {self.switchedOn}"
 
 
-class SmartPlug(SmartDevice):
+class SmartPlug(SmartDevice):  # Smart plug inherits from SmartDevice
     def __init__(self, consumption):
         super().__init__()
-        self.consumption = consumption
+        self.consumptionRate = consumption
 
     def getConsumptionRate(self):
-        return self.consumption
+        return self.consumptionRate
 
     def setConsumptionRate(self, consumption):
-        self.consumption = consumption
+        if 0 <= consumption <= 150:
+            self.consumptionRate = consumption
+        else:
+            print("Invalid consumption rate, valid options are between 0 and 150.")
 
     def __str__(self):
-        return f"Switched On: {self.switchedOn}\nConsumption Rate: {self.consumption}"
+        return f"Switched On: {self.switchedOn}\nConsumption Rate: {self.consumptionRate}"
 
 
-def testSmartPlug():
-    smartPlug = SmartPlug(45)
-    smartPlug.toggleSwitch()
-    print(smartPlug.getSwitchedOn())
-    print(smartPlug.getConsumptionRate())
-    smartPlug.setConsumptionRate(150)
-    print(smartPlug.getConsumptionRate())
-
-    print(smartPlug)
-
-
-class SmartLight(SmartDevice):
+class SmartLight(SmartDevice):  # Smart light inherits from SmartDevice
     def __init__(self):
         super().__init__()
         self.brightness = 0
@@ -47,20 +40,13 @@ class SmartLight(SmartDevice):
         return self.brightness
 
     def setBrightness(self, brightness):
-        self.brightness = brightness
+        if 0 <= brightness <= 100:
+            self.brightness = brightness
+        else:
+            print("Invalid consumption rate, valid options are between 0 and 100.")
 
     def __str__(self):
         return f"Switched On: {self.switchedOn}\nBrightness: {self.brightness}%"
-
-
-def testSmartLight():
-    smartLight = SmartLight()
-    smartLight.toggleSwitch()
-    print(smartLight.getSwitchedOn())
-    print(smartLight.getBrightness())
-    smartLight.setBrightness(50)
-    print(smartLight.getBrightness())
-    print(smartLight)
 
 
 class SmartHome:
@@ -72,6 +58,9 @@ class SmartHome:
 
     def getDeviceAt(self, index):
         return self.devices[index]
+
+    def removeDevice(self, index):
+        self.devices.pop(index)
 
     def addDevice(self, device):
         self.devices.append(device)
@@ -93,10 +82,34 @@ class SmartHome:
         output = "Devices in Smart Home:"
         for device in self.devices:
             if isinstance(device, SmartPlug):
-                output += f"\nSmart Plug:\n - Switched On: {device.switchedOn}\n - Consumption: {device.consumption}"
+                output += f"\nSmart Plug:\n - Switched On: {device.getSwitchedOn()}\n\
+ - Consumption: {device.getConsumptionRate()}"
             else:
-                output += f"\nSmart Light:\n - Switched On: {device.switchedOn}\n - Brightness: {device.brightness}%"
+                output += f"\nSmart Light:\n - Switched On: {device.getSwitchedOn()}\n\
+ - Brightness: {device.getBrightness()}%"
         return output
+
+
+# Tests
+
+def testSmartPlug():
+    smartPlug = SmartPlug(45)
+    smartPlug.toggleSwitch()
+    print("Switched On:", smartPlug.getSwitchedOn())  # True
+    print("Consumption rate is:", smartPlug.getConsumptionRate())  # 45
+    smartPlug.setConsumptionRate(150)
+    print("Consumption rate is:", smartPlug.getConsumptionRate())  # 150
+    print(smartPlug)
+
+
+def testSmartLight():
+    smartLight = SmartLight()
+    smartLight.toggleSwitch()
+    print("Switched On:", smartLight.getSwitchedOn())  # True
+    print("Brightness is:", smartLight.getBrightness())  # 0
+    smartLight.setBrightness(50)
+    print("Brightness is:", smartLight.getBrightness())  # 50
+    print(smartLight)
 
 
 def testSmartHome():
@@ -113,8 +126,27 @@ def testSmartHome():
     smartHome.addDevice(smartLight)
     smartHome.toggleSwitch(1)
     print(smartHome)
+    """
+    Devices in Smart Home:
+Smart Plug:
+ - Switched On: True
+ - Consumption: 150
+Smart Plug:
+ - Switched On: True
+ - Consumption: 25
+Smart Light:
+ - Switched On: False
+ - Brightness: 50%"""
     smartHome.turnAllOn()
     print(smartHome)
-
-
-testSmartHome()
+    """
+Devices in Smart Home:
+Smart Plug:
+ - Switched On: True
+ - Consumption: 150
+Smart Plug:
+ - Switched On: True
+ - Consumption: 25
+Smart Light:
+ - Switched On: True
+ - Brightness: 50%"""
