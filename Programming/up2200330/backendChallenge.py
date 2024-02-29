@@ -1,14 +1,22 @@
 # Classes
-class SmartPlug():
-    def __init__(self, consumption):
+class SmartDevice:  # Base class containing the switchedOn variable for inheritance
+    def __init__(self):
         self.switchedOn = False
-        self.consumptionRate = consumption
+
+    def getSwitchedOn(self):
+        return self.switchedOn
 
     def toggleSwitch(self):
         self.switchedOn = not self.switchedOn
 
-    def getSwitchedOn(self):
-        return self.switchedOn
+    def __str__(self):
+        return f"Switched On: {self.switchedOn}"
+
+
+class SmartPlug(SmartDevice):  # Smart plug inherits from SmartDevice
+    def __init__(self, consumption):
+        super().__init__()
+        self.consumptionRate = consumption
 
     def getConsumptionRate(self):
         return self.consumptionRate
@@ -16,21 +24,17 @@ class SmartPlug():
     def setConsumptionRate(self, consumption):
         if 0 <= consumption <= 150:
             self.consumptionRate = consumption
+        else:
+            print("Invalid consumption rate, valid options are between 0 and 150.")
 
     def __str__(self):
         return f"Switched On: {self.switchedOn}\nConsumption Rate: {self.consumptionRate}"
 
 
-class SmartLight():  # Smart light inherits from SmartDevice
+class SmartLight(SmartDevice):  # Smart light inherits from SmartDevice
     def __init__(self):
-        self.switchedOn = False
+        super().__init__()
         self.brightness = 0
-
-    def toggleSwitch(self):
-        self.switchedOn = not self.switchedOn
-
-    def getSwitchedOn(self):
-        return self.switchedOn
 
     def getBrightness(self):
         return self.brightness
@@ -38,6 +42,8 @@ class SmartLight():  # Smart light inherits from SmartDevice
     def setBrightness(self, brightness):
         if 0 <= brightness <= 100:
             self.brightness = brightness
+        else:
+            print("Invalid consumption rate, valid options are between 0 and 100.")
 
     def __str__(self):
         return f"Switched On: {self.switchedOn}\nBrightness: {self.brightness}%"

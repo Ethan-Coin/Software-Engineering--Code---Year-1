@@ -1,5 +1,5 @@
 from tkinter import *
-from backend import SmartHome, SmartLight, SmartPlug
+from backendChallenge import SmartHome, SmartLight, SmartPlug
 
 
 def setUpHome():
@@ -63,6 +63,13 @@ class SmartHomeSystem:
         self.deviceFrame = Frame(self.mainFrame)
         self.deviceFrame.grid(column=0, row=1, columnspan=5, sticky="nwse")
         self.deviceFrame.columnconfigure((0, 1, 2, 3, 4), weight=1)
+        self.deviceFrame.rowconfigure(
+            (0, 1, 2, 3, 4, 5, 6, 7, 8, 9), weight=1)
+
+        # Page Number variables
+        self.pageNumber = 1
+        self.maxPageNumber = 1
+        self.page = StringVar()
 
     def run(self):
         self.createMainWidgets()
@@ -81,10 +88,40 @@ class SmartHomeSystem:
         btnTurnAllOff = Button(
             self.mainFrame,
             text="Turn all off",
-            command=self.turnAllOff
+            command=self.turnAllOff,
+            width=10
         )
         btnTurnAllOff.grid(column=2, row=0, columnspan=2,
                            sticky="nwse", pady=5, padx=5)
+
+        btnClose = Button(
+            self.mainFrame,
+            text="Close",
+            command=self.win.destroy
+        )
+        btnClose.grid(column=4, row=0, sticky="nwse", pady=5, padx=5)
+
+        lblPage = Label(
+            self.mainFrame,
+            textvariable=self.page,
+
+        )
+        lblPage.grid(column=2, row=2, sticky="nwse")
+
+        btnBack = Button(
+            self.mainFrame,
+            text="Back",
+
+            command=self.backPage
+        )
+        btnBack.grid(column=1, row=2, sticky="nwse", pady=5, padx=5)
+
+        btnNext = Button(
+            self.mainFrame,
+            text="Next",
+            command=self.nextPage
+        )
+        btnNext.grid(column=3, row=2, sticky="nwse", pady=5, padx=5)
 
         btnAdd = Button(
             self.mainFrame,
@@ -97,9 +134,21 @@ class SmartHomeSystem:
     def createDeviceWidgets(self):
         self.delAllDeviceWidgets()
         numDevices = len(self.smartHome.getDevices())
+        if numDevices % 10 > 0 or numDevices == 0:
+            self.maxPageNumber = numDevices//10 + 1
+        else:
+            self.maxPageNumber = numDevices//10
+        if self.pageNumber > self.maxPageNumber:
+            self.pageNumber = self.maxPageNumber
+        self.page.set(f"Page {self.pageNumber}/{(self.maxPageNumber)}")
 
-        for i in range(numDevices):
-            self.deviceFrame.rowconfigure(i, weight=1)
+        startIndex = (self.pageNumber - 1) * 10
+        if numDevices-startIndex > 10:
+            EndIndex = startIndex + 10
+        else:
+            EndIndex = numDevices
+
+        for i in range(startIndex, EndIndex):
             self.height += 30
             device = self.smartHome.getDeviceAt(i)
             deviceText = self.deviceText(device)
@@ -110,7 +159,7 @@ class SmartHomeSystem:
                 anchor="w",
                 width=9
             )
-            lblDevice.grid(row=i, column=0, columnspan=2,
+            lblDevice.grid(row=i % 10, column=0, columnspan=2,
                            sticky="nwse")
             self.smartHomeWidgets.append(lblDevice)
 
@@ -119,7 +168,7 @@ class SmartHomeSystem:
                 text="Toggle",
                 command=lambda index=i: self.toggleDevice(index)
             )
-            btnToggle.grid(row=i, column=2, sticky="nwse",
+            btnToggle.grid(row=i % 10, column=2, sticky="nwse",
                            pady=5, padx=(0, 0))
             self.smartHomeWidgets.append(btnToggle)
 
@@ -129,7 +178,7 @@ class SmartHomeSystem:
                 command=lambda index=i: self.editDevice(index),
                 width=1
             )
-            btnEdit.grid(row=i, column=3, sticky="nwse", pady=5, padx=5)
+            btnEdit.grid(row=i % 10, column=3, sticky="nwse", pady=5, padx=5)
             self.smartHomeWidgets.append(btnEdit)
 
             btnDelete = Button(
@@ -138,7 +187,7 @@ class SmartHomeSystem:
                 command=lambda index=i: self.removeDevice(index),
                 width=4
             )
-            btnDelete.grid(row=i, column=4, sticky="nwse", pady=5, padx=5)
+            btnDelete.grid(row=i % 10, column=4, sticky="nwse", pady=5, padx=5)
             self.smartHomeWidgets.append(btnDelete)
         self.y = (self.win.winfo_screenheight() // 2) - (self.height // 2)
         self.x = (self.win.winfo_screenwidth() // 2) - (self.width // 2)
@@ -149,7 +198,7 @@ class SmartHomeSystem:
     def addDevice(self):
         win = Toplevel()
         win.title("Add Device")
-        height = 175
+        height = 150
         width = 250
         y = (win.winfo_screenheight() // 2) - (height // 2)
         x = (win.winfo_screenwidth() // 2) - (width // 2)
@@ -161,41 +210,26 @@ class SmartHomeSystem:
         mainFrame = Frame(win)
         mainFrame.grid(column=0, row=0, padx=5, pady=5, sticky="nwse")
         mainFrame.columnconfigure((0, 1), weight=1)
-        mainFrame.rowconfigure((0, 1, 2, 3, 4), weight=1)
-        entry = []
-        device = StringVar()
+        mainFrame.rowconfigure((0, 1, 2, 3), weight=1)
+
+        device = IntVar(value=1)
         consumptionStr = StringVar()
         errorMsg = StringVar(value="")
 
         lblMsg = Label(mainFrame, text="Add a Device")
         lblMsg.grid(column=0, row=0, columnspan=2, sticky="nwse")
 
-        lblDevice = Label(mainFrame, text="Device:")
-        lblDevice.grid(column=0, row=1, columnspan=2, sticky="nwse")
+        radioPlug = Radiobutton(mainFrame, text="Smart Plug",
+                                variable=device, value=1)
+        radioPlug.grid(column=0, row=1, sticky="w")
 
-        def plug():
-            if device.get() != "Smart Plug":
-                entryPlug = Entry(
-                    mainFrame, textvariable=consumptionStr)
-                entryPlug.grid(column=0, row=3, columnspan=2, sticky="nwse")
-                entry.append(entryPlug)
-            device.set("Smart Plug")
-            lblDevice.configure(text="Device: Smart Plug")
+        spinPlug = Spinbox(mainFrame, from_=0, to=150,
+                           textvariable=consumptionStr)
+        spinPlug.grid(column=1, row=1)
 
-        btnPlug = Button(mainFrame, text="Smart Plug",
-                         command=plug)
-        btnPlug.grid(column=0, row=2, sticky="nwse", padx=5, pady=5)
-
-        def light():
-            if device.get() == "Smart Plug":
-                entry[0].destroy()
-                entry.pop(0)
-            device.set("Smart Light")
-            lblDevice.configure(text="Device: Smart Light")
-
-        btnLight = Button(
-            mainFrame, text="Smart Light", command=light)
-        btnLight.grid(column=1, row=2, sticky="nwse", padx=5, pady=5)
+        radioLight = Radiobutton(
+            mainFrame, text="Smart Light", variable=device, value=2)
+        radioLight.grid(column=0, row=2, sticky="w")
 
         def addDevice():
             def error():
@@ -207,7 +241,7 @@ class SmartHomeSystem:
                 justify="center",
                 width=210
             )
-            if device.get() == "Smart Plug":
+            if device.get() == 1:
                 if consumptionStr.get().isdigit():
                     consumption = int(consumptionStr.get())
                     if 0 <= consumption <= 150:
@@ -225,22 +259,17 @@ class SmartHomeSystem:
                     msgError.grid(column=0, row=0, sticky="nwse",
                                   padx=20, pady=50)
                     lblMsg.after(2000, error)
-            elif device.get() == "Smart Light":
+            else:
                 self.smartHome.addDevice(SmartLight())
                 win.destroy()
                 self.createDeviceWidgets()
-            else:
-                errorMsg.set("Error Device not selected")
-                msgError.grid(column=0, row=0, sticky="nwse",
-                              padx=20, pady=50)
-                lblMsg.after(2000, error)
 
         btnAddDevice = Button(
             mainFrame,
             text="Add",
             command=addDevice
         )
-        btnAddDevice.grid(column=0, row=4, columnspan=2,
+        btnAddDevice.grid(column=0, row=3, columnspan=2,
                           sticky="nwse", padx=30, pady=5)
 
     def editDevice(self, index):
@@ -300,26 +329,24 @@ class SmartHomeSystem:
         )
         lblSwitchedOn.grid(column=0, row=2, columnspan=2)
 
-        def toggle():
-            device.toggleSwitch()
-            if device.getSwitchedOn():
+        def switchText():
+            if switchedOn.get():
                 text = "On"
             else:
                 text = "Off"
             switchedOnText.set(text)
 
-        btnToggle = Button(
+        checkSwitchedOn = Checkbutton(
             mainFrame,
-            text="Toggle",
-            command=toggle
+            variable=switchedOn,
+            onvalue=True,
+            offvalue=False,
+            command=switchText
         )
-        btnToggle.grid(column=2, row=2, sticky="nwse", padx=5, pady=5)
+        checkSwitchedOn.grid(column=2, row=2, sticky="e")
 
         switchedOnText = StringVar()
-        if device.getSwitchedOn():
-            switchedOnText.set("On")
-        else:
-            switchedOnText.set("Off")
+        switchText()
 
         lblSwitchedOnValue = Label(
             mainFrame,
@@ -334,12 +361,14 @@ class SmartHomeSystem:
         )
         lblOption.grid(column=0, row=3, columnspan=2)
 
-        entryOption = Entry(
+        spinOption = Spinbox(
             mainFrame,
+            from_=0,
+            to=limit,
             textvariable=optionVar,
             width=1
         )
-        entryOption.grid(column=2, row=3, columnspan=2, sticky="nwse")
+        spinOption.grid(column=2, row=3, columnspan=2, sticky="nwse")
 
         def confirm():
             def error():
@@ -353,7 +382,9 @@ class SmartHomeSystem:
             )
             if optionVar.get().isdigit():
                 intOptionVar = int(optionVar.get())
-                if isinstance(device, SmartPlug):
+                if switchedOn.get() != device.getSwitchedOn():
+                    device.toggleSwitch()
+                if deviceName == "Smart Plug":
                     if 0 <= intOptionVar <= 150:
                         device.setConsumptionRate(intOptionVar)
                         win.destroy()
@@ -406,6 +437,16 @@ class SmartHomeSystem:
         deviceText = self.deviceText(device)
         self.smartHomeWidgets[index*4].configure(text=deviceText)
 
+    def nextPage(self):
+        if self.pageNumber < self.maxPageNumber:
+            self.pageNumber += 1
+            self.createDeviceWidgets()
+
+    def backPage(self):
+        if self.pageNumber > 1:
+            self.pageNumber -= 1
+            self.createDeviceWidgets()
+
     def removeDevice(self, index):
         self.smartHome.removeDevice(index)
         self.createDeviceWidgets()
@@ -413,7 +454,11 @@ class SmartHomeSystem:
     def turnAllOn(self):
         self.smartHome.turnAllOn()
         numDevices = len(self.smartHome.getDevices())
-        for i in range(numDevices):
+        if numDevices - (self.pageNumber-1) * 10 >= 10:
+            forRange = 10
+        else:
+            forRange = numDevices - (self.pageNumber-1) * 10
+        for i in range(forRange):
             device = self.smartHome.getDeviceAt(i)
             deviceText = self.deviceText(device)
             self.smartHomeWidgets[i*4].configure(text=deviceText)
@@ -421,7 +466,11 @@ class SmartHomeSystem:
     def turnAllOff(self):
         self.smartHome.turnAllOff()
         numDevices = len(self.smartHome.getDevices())
-        for i in range(numDevices):
+        if numDevices - (self.pageNumber-1) * 10 >= 10:
+            forRange = 10
+        else:
+            forRange = numDevices - (self.pageNumber-1) * 10
+        for i in range(forRange):
             device = self.smartHome.getDeviceAt(i)
             deviceText = self.deviceText(device)
             self.smartHomeWidgets[i*4].configure(text=deviceText)
@@ -432,10 +481,33 @@ class SmartHomeSystem:
         self.smartHomeWidgets = []
 
 
+def testSmartHomeSystem():
+    smartHome = SmartHome()
+    for i in range(35):
+        if i % 2 != 0:
+            smartHome.addDevice(SmartPlug(i))
+        else:
+            smartHome.addDevice(SmartLight())
+
+    smartHomeSystem = SmartHomeSystem(smartHome)
+    smartHomeSystem.run()
+
+
+testSmartHomeSystem()
+
+
 def main():
     smartHome = setUpHome()
     smartHomeSystem = SmartHomeSystem(smartHome)
     smartHomeSystem.run()
 
+# Do the challenges afterwards
 
-main()
+# put spin boxes in the main gui
+# Photoimages of devices
+# Device Scheduler
+# Interface & Accessibility setting
+# chatgpt comment code
+# font size 3 options small medium large 3 other font families
+
+# more than
