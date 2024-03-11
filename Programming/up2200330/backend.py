@@ -14,14 +14,14 @@ class SmartPlug():
         return self.consumptionRate
 
     def setConsumptionRate(self, consumption):
-        if 0 <= consumption <= 150:
+        if 0 <= consumption <= 150:  # Checks if consumption is between 0 and 150
             self.consumptionRate = consumption
 
     def __str__(self):
         return f"Switched On: {self.switchedOn}\nConsumption Rate: {self.consumptionRate}"
 
 
-class SmartLight():  # Smart light inherits from SmartDevice
+class SmartLight():
     def __init__(self):
         self.switchedOn = False
         self.brightness = 0
@@ -36,7 +36,7 @@ class SmartLight():  # Smart light inherits from SmartDevice
         return self.brightness
 
     def setBrightness(self, brightness):
-        if 0 <= brightness <= 100:
+        if 0 <= brightness <= 100:  # Checks if brightness is between 0 and 100
             self.brightness = brightness
 
     def __str__(self):
@@ -54,7 +54,7 @@ class SmartHome:
         return self.devices[index]
 
     def removeDevice(self, index):
-        self.devices.pop(index)
+        del self.devices[index]
 
     def addDevice(self, device):
         self.devices.append(device)

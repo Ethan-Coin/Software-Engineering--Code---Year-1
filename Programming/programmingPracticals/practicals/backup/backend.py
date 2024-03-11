@@ -22,7 +22,7 @@ class SmartPlug(SmartDevice):  # Smart plug inherits from SmartDevice
         return self.consumptionRate
 
     def setConsumptionRate(self, consumption):
-        if 0 <= consumption <= 150:  # Checks if consumption is between 0 and 150
+        if 0 <= consumption <= 150:
             self.consumptionRate = consumption
         else:
             print("Invalid consumption rate, valid options are between 0 and 150.")
@@ -40,7 +40,7 @@ class SmartLight(SmartDevice):  # Smart light inherits from SmartDevice
         return self.brightness
 
     def setBrightness(self, brightness):
-        if 0 <= brightness <= 100:  # Checks if brightness is between 0 and 100
+        if 0 <= brightness <= 100:
             self.brightness = brightness
         else:
             print("Invalid consumption rate, valid options are between 0 and 100.")
