@@ -261,9 +261,10 @@ class SmartHomeSystem:
             lblDeviceImg = Label(
                 self.deviceFrame,
                 bg=self.bgColour,
+                image=img,
                 width=28
             )
-            lblDeviceImg.configure(image=img)
+            lblDeviceImg.image = img
             lblDeviceImg.grid(row=i, column=0, sticky="w")
             self.deviceWidgets.append(lblDeviceImg)
 
@@ -996,16 +997,18 @@ class SmartHomeSystem:
         btnNo.grid(column=1, row=1, sticky="nwse", padx=5, pady=5)
 
     def updateClock(self):  # Updates the clock and checks for on and off times
-        """Error sometimes where the clock speeds up for an unknown reason,
-            could not replicate the error to fix it."""
+        """Error sometimes the time is not updated every 3 seconds, the error is hard to
+          replicate"""
         time = self.time.get() + 3
-        self.time.set(time)
+        self.time.set(time)  # Updates the time
+        # Retrieves each on time in the format {index: time}
         for onTime in self.onTimes:
             for index in onTime:
+                # Gets the value from the key and compares to the time
                 if time == onTime[index]:
                     device = self.smartHome.getDeviceAt(index)
-                    if not device.getSwitchedOn():
-                        device.toggleSwitch()
+                    if not device.getSwitchedOn():  # Checks if the device is off
+                        device.toggleSwitch()  # If so turns on the device
                         self.createDeviceWidgets()
         for offTime in self.offTimes:
             for index in offTime:
@@ -1014,14 +1017,15 @@ class SmartHomeSystem:
                     if device.getSwitchedOn():
                         device.toggleSwitch()
                         self.createDeviceWidgets()
-        if time < 10:
+        if time < 10:  # Updates the clock displayed to the user
             self.clock.set(f"Clock: 0{time:}:00")
         elif time < 24:
             self.clock.set(f"Clock: {time}:00")
         else:
             self.time.set(0)
             self.clock.set("Clock: 00:00")
-        self.win.after(3000, self.updateClock)
+        # Updates the clock every 3 seconds
+        self.mainFrame.after(3000, self.updateClock)
 
     def deviceText(self, device):  # Sets the text for the device
         if device.getSwitchedOn():  # Checks if the device is switched on
