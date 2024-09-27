@@ -149,7 +149,7 @@ class SmartHomeSystem:
         )
         lblClock.grid(column=3, row=0, columnspan=2, sticky="nwse")
         # Updates the clock every 3 seconds
-        self.win.after(3000, self.updateClock)
+        lblClock.after(3000, self.updateClock)
 
         btnTurnAllOn = Button(
             self.mainFrame,
@@ -597,7 +597,7 @@ class SmartHomeSystem:
                 win,
                 textvariable=onTime,
                 from_=0,
-                to=24,
+                to=21,
                 increment=3,
                 width=3,
                 bg=self.bgColour,
@@ -610,7 +610,7 @@ class SmartHomeSystem:
                 win,
                 textvariable=offTime,
                 from_=0,
-                to=24,
+                to=21,
                 increment=3,
                 width=3,
                 bg=self.bgColour,
@@ -1001,6 +1001,14 @@ class SmartHomeSystem:
           replicate"""
         time = self.time.get() + 3
         self.time.set(time)  # Updates the time
+        if time < 10:  # Updates the clock displayed to the user
+            self.clock.set(f"Clock: 0{time:}:00")
+        elif time < 24:
+            self.clock.set(f"Clock: {time}:00")
+        else:
+            time = 0
+            self.time.set(time)
+            self.clock.set("Clock: 00:00")
         # Retrieves each on time in the format {index: time}
         for onTime in self.onTimes:
             for index in onTime:
@@ -1017,13 +1025,6 @@ class SmartHomeSystem:
                     if device.getSwitchedOn():
                         device.toggleSwitch()
                         self.createDeviceWidgets()
-        if time < 10:  # Updates the clock displayed to the user
-            self.clock.set(f"Clock: 0{time:}:00")
-        elif time < 24:
-            self.clock.set(f"Clock: {time}:00")
-        else:
-            self.time.set(0)
-            self.clock.set("Clock: 00:00")
         # Updates the clock every 3 seconds
         self.mainFrame.after(3000, self.updateClock)
 

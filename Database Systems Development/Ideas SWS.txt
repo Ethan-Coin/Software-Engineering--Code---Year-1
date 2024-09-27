@@ -1,0 +1,71 @@
+    Teacher room how many students (could do lecture halls to see if it facilitates enough seats)
+Would allow the teacher to see how many students are allowed 
+helps the teacher to prepare materials if need.
+
+    Average grade per teacher in a certain course 
+See which teacher is providing too many good grades or they are good at teaching and the rest of 
+the staff can learn for this person.
+
+    Average grade per course
+Would allow for a change in course structure, is it too hard / bad teachers
+
+    Staff per department 
+How many staff per department can see if the department have too many staff
+
+    List all the departments a staff member belongs to, and the course they teach.
+Be able to Identify staff who might be overloaded across multiple departments,
+optimising course assignments base don staff expertise and departmental needs.
+
+    Find the total enrolments for each course for the year of 2022
+This would help the business to assign more resources for a certain year 
+and allow monitoring of the total amount of students who signed up.
+
+    Identify staff members who teach each course with their contact information
+This query will allow for students or staff to easily retrieve staff members contact information
+for a certain course.
+
+    Identify how many students attend the drop-in session
+This query will allow the school to send more staff members if needed if there is a large amount
+of students attending the session
+
+    Identify staff members who are teaching the many sessions
+This query will allow for the uni to reduce the amount of sessions that a certain staff member may 
+be teaching as it could be too many. (many get amount of hours that the staff member is teaching)
+
+    Sessions per room
+This query would allow for the university to see how many sessions are being held in each room of 
+a certain category like Lecture. To see which rooms are being under utilised or over utilised to
+share the load of students more evenly. Can disperse the students rather than being heavily 
+congested in one building.
+
+
+
+
+
+ADDRESSES (190) 
+COUNTRIES (8) 
+COURSES (10) 
+COURSES_MODULES (68) 
+DEPARTMENTS (6) 
+MODULES (36) 
+MODULES_RESULTS (2277) 
+ROOMS (10) 
+STAFF (24) 
+STAFF_MODULES (122) 
+STAFF_TEACHING (300) 
+STUDENTS (105) 
+STUDENTS_ADDRESSES (190) 
+STUDENTS_TEACHING (495) 
+TEACHING_SESSIONS (90) 
+
+Enum values 
+/*=======================
+--Define ENUM types
+=========================*/
+CREATE TYPE staff_position AS ENUM ('Head of Department', 'Associate');
+CREATE TYPE staff_role AS ENUM ('Lecturer', 'Senior Lecturer', 'Tutor', 'Learning Support');
+CREATE TYPE acc_level AS ENUM ('Level 4', 'Level 5', 'Level 6', 'Level 7');
+CREATE TYPE dpt_type AS ENUM ('Academic', 'Non-Academic');
+CREATE TYPE addr_type AS ENUM ('Term Address', 'Home Address');
+CREATE TYPE course_type AS ENUM ('BSc', 'MSc', 'PHD', 'Other');
+CREATE TYPE session_type AS ENUM ('Lecture', 'Seminar', 'Lab', 'Drop-in', 'Other');

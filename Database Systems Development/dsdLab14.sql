@@ -106,7 +106,7 @@ ORDER BY "Average Loan Duration" ASC;
 SELECT b.book_title AS "Book Title"
 FROM books b
 WHERE b.book_id NOT IN
-        ( SELECT bl.book_id
+        (SELECT bl.book_id
          FROM books_languages bl
          JOIN languages l ON bl.lang_id = l.lang_id
          WHERE l.lang_name = 'English' );
@@ -137,3 +137,45 @@ HAVING COUNT(DISTINCT ba.book_id) >
     (SELECT COUNT(*) / COUNT(DISTINCT auth_id) AS "Average Number of Books per Author"
      FROM books_authors)
 ORDER BY "Number of Books" DESC;
+
+--Question 1
+
+SELECT a.auth_name AS "Author Name",
+       a.auth_last_name AS "Author Last Name"
+FROM authors a
+JOIN books_authors ba ON a.auth_id = ba.auth_id
+WHERE ba.book_id IN
+        (SELECT book_id
+         FROM books
+         WHERE book_pub_year > 2020);
+
+--Question 2
+
+SELECT a.auth_name AS "Author Name",
+       a.auth_last_name AS "Author Last Name"
+FROM authors AS a
+WHERE EXISTS
+        (SELECT 1
+         FROM books_authors AS ba
+         JOIN books_editions AS be ON ba.book_id = be.book_id
+         WHERE ba.auth_id = a.auth_id
+             AND be.ed_year > 2020);
+
+--Question 3
+
+SELECT CONCAT_WS(' ', a.auth_name, a.auth_last_name) AS "Author Name",
+       b.book_title AS "Book Title",
+       b.book_pub_year AS "Orignal Publication Year",
+       le."Last Ed" AS "Last Ed. Year"
+FROM authors AS a
+JOIN books_authors ba ON a.auth_id = ba.auth_id
+JOIN books b ON ba.book_id = b.book_id
+JOIN
+    (SELECT be.book_id,
+            MAX(be.ed_year) AS "Last Ed"
+     FROM books_editions be
+     GROUP BY be.book_id
+     HAVING MAX(be.ed_year) > 2020) le ON b.book_id = le.book_id
+ORDER BY a.auth_name,
+         a.auth_last_name,
+         b.book_title;
